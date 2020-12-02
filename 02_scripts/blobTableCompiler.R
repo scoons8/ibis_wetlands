@@ -1,6 +1,6 @@
 ################################################################################
 # Task: 
-# Compile GEE water files and add in extended means for Mar and Apr. 
+# Merge GEE water files and add in extended means for Mar and Apr. 
 # Apply to each ibis blob data (55 total) extracted from GEE
 # 
 # Date:

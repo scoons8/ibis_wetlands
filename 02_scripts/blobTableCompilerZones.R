@@ -1,6 +1,6 @@
 ################################################################################
 # Task: 
-# Compile GEE water files and add in extended means for the sites with 
+# Merge GEE water files and add in extended means for the sites with 
 # zones (malheur and saltlake blobs)
 #
 # Date:
