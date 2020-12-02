@@ -209,9 +209,9 @@
 
 # Write the data as .csv's -> will join to polygons in QGIS -----
 
-write.csv(wetArea02, file = "wetAreaFinal.csv")  # change to wetArea01 if no extensions were used, otherwise use wetArea02
-write.csv(hydro02, file = "hydroGraFinal.csv")   # change to hydro01 if no extensions were used, otherwise use hydro02
-write.csv(Annual02, file = "hydroPerFinal.csv")
+write.csv(wetArea02, file = "wetAreaCompiled.csv")  # change to wetArea01 if no extensions were used, otherwise use wetArea02
+write.csv(hydro02, file = "hydroGraCompiled.csv")   # change to hydro01 if no extensions were used, otherwise use hydro02
+write.csv(Annual02, file = "hydroPerCompiled.csv")
 
 # wetAreaFin <- read_csv("wetAreaFinal.csv")
 # hydroGraFin <- read_csv("hydroGraFinal.csv")
@@ -439,9 +439,9 @@ setwd("/Users/sc148852/Box/R/ibisSites/redRockLakesBlob") # change site folder h
 
 # Write the data as .csv's -> will join to polygons in QGIS -----
 
-write.csv(wetArea02, file = "wetAreaFinal.csv")  # change to wetArea01 if no extensions were used, otherwise use wetArea02
-write.csv(hydro02, file = "hydroGraFinal.csv")   # change to hydro01 if no extensions were used, otherwise use hydro02
-write.csv(Annual02, file = "hydroPerFinal.csv")
+write.csv(wetArea02, file = "wetAreaCompiled.csv")  # change to wetArea01 if no extensions were used, otherwise use wetArea02
+write.csv(hydro02, file = "hydroGraCompiled.csv")   # change to hydro01 if no extensions were used, otherwise use hydro02
+write.csv(Annual02, file = "hydroPerCompiled.csv")
 
 # wetAreaFin <- read_csv("wetAreaFinal.csv")
 # hydroGraFin <- read_csv("hydroGraFinal.csv")
@@ -680,9 +680,9 @@ setwd("/Users/sc148852/Box/R/ibisSites/rockCreekBlob") # change site folder here
 
 # Write the data as .csv's -> will join to polygons in QGIS -----
 
-write.csv(wetArea02, file = "wetAreaFinal.csv")  # change to wetArea01 if no extensions were used, otherwise use wetArea02
-write.csv(hydro02, file = "hydroGraFinal.csv")   # change to hydro01 if no extensions were used, otherwise use hydro02
-write.csv(Annual02, file = "hydroPerFinal.csv")
+write.csv(wetArea02, file = "wetAreaCompiled.csv")  # change to wetArea01 if no extensions were used, otherwise use wetArea02
+write.csv(hydro02, file = "hydroGraCompiled.csv")   # change to hydro01 if no extensions were used, otherwise use hydro02
+write.csv(Annual02, file = "hydroPerCompiled.csv")
 
 # wetAreaFin <- read_csv("wetAreaFinal.csv")
 # hydroGraFin <- read_csv("hydroGraFinal.csv")
@@ -928,9 +928,9 @@ setwd("/Users/sc148852/Box/R/ibisSites/willowCreekResBlob") # change site folder
 
 # Write the data as .csv's -> will join to polygons in QGIS -----
 
-write.csv(wetArea02, file = "wetAreaFinal.csv")  # change to wetArea01 if no extensions were used, otherwise use wetArea02
-write.csv(hydro02, file = "hydroGraFinal.csv")   # change to hydro01 if no extensions were used, otherwise use hydro02
-write.csv(Annual02, file = "hydroPerFinal.csv")
+write.csv(wetArea02, file = "wetAreaCompiled.csv")  # change to wetArea01 if no extensions were used, otherwise use wetArea02
+write.csv(hydro02, file = "hydroGraCompiled.csv")   # change to hydro01 if no extensions were used, otherwise use hydro02
+write.csv(Annual02, file = "hydroPerCompiled.csv")
 
 # wetAreaFin <- read_csv("wetAreaFinal.csv")
 # hydroGraFin <- read_csv("hydroGraFinal.csv")
