@@ -14,6 +14,7 @@
   library('leaflet')
   library('sf')
   library('sp')
+  library('ggridges')
 
 # Functions -----
   
@@ -32,6 +33,36 @@
   hydroGra <- fread("01_data/08_final_hydro_data/hydroGraFin.csv")
   
 #-------------------------------------------------------------------------------
+# Extra data-cleaning that has arisen as I explore the code -----
+  
+  wetArea <- wetArea %>% 
+    filter(wetType != 'res') %>% 
+    mutate(month2 = case_when(month == '3' ~ 'Mar',
+                               month == '4' ~ 'Apr',
+                               month == '5' ~ 'May',
+                               month == '6' ~ 'Jun',
+                               month == '7' ~ 'Jul',
+                               month == '8' ~ 'Aug',
+                               month == '9' ~ 'Sept',
+                               month == '10' ~ 'Oct'))
+  
+  hydroGra <- hydroGra %>%
+    filter(wetType != 'res') %>% 
+    mutate(month = case_when(month == '3' ~ 'Mar',
+                               month == '4' ~ 'Apr',
+                               month == '5' ~ 'May',
+                               month == '6' ~ 'Jun', 
+                               month == '7' ~ 'Jul',
+                               month == '8' ~ 'Aug',
+                               month == '9' ~ 'Sept',
+                               month == '10' ~ 'Oct'))
+  
+  fwrite(wetArea, '01_data/08_final_hydro_data/wetAreaFin02.csv')
+  fwrite(hydroGra, '01_data/08_final_hydro_data/hydroGraFin02.csv')
+  
+  wetArea <- fread('01_data/08_final_hydro_data/wetAreaFin02.csv')
+  hydroGra <- fread('01_data/08_final_hydro_data/hydroGraFin02.csv')
+#-------------------------------------------------------------------------------
 # wetHa for ecohydroregion over time -----
   
   # Group, Sum, Plot -----
@@ -39,12 +70,12 @@
     # Group -----
   
       wetArea01 <- (wetArea) %>%            # name variable
-        filter(month > 3, month < 9) %>%    # filter to April through August
+        filter(month > 3, month < 9) %>%         # filter to April through August
         group_by(ecoHydro, year) %>%        # select the columns you want to sum across
         summarise(wetHa=sum(wetHa)) %>%     # sum the wetHa -> result is the total wetHa for each year in each region
         ungroup() %>%                       # ungroup
-        mutate(year = as.numeric(year))     # make the column 'year' numeric
-  
+        mutate(year = as.numeric(year))
+   
     # plot -----
   
       wetPlot01 <- ggplot(wetArea01, aes(x = year, y = wetHa, color = ecoHydro)) +  
@@ -97,7 +128,7 @@
   # Create column that sorts years among two periods -----
     
     wetTerm <- wetArea %>% 
-      filter(month > 3, month < 9) %>%                   # filter data to April - August
+      filter(month > 3, month < 9)                       # filter data to April - August
       mutate(year = as.numeric(year),                    # makes the column 'year' numeric
              term = 't1',                                # creates a column called 'term' with filled with 't1'
              term = replace(term, year >2003, 't2'))     # labels everything in 'term' as 't2' if 'year' is greater than 2003
@@ -147,7 +178,7 @@
   # Add term to dataframe; sum over region, year, month, and term
   # This gives the total wetHa for each month in each year for each region -----
   
-    wetTermMonth <- wetArea %>%                  
+    wetTermMonth <- wetArea %>%  
         mutate(year = as.numeric(year),                      # makes the column 'year' numeric
                term = 't1',                                  # creates a column called 'term' with filled with 't1'
                term = replace(term, year >2003, 't2')) %>%   # labels everything in 'term' as 't2' if 'year' is greater than 2003
@@ -175,6 +206,13 @@
       soRockies <- `df.Southern Rockies and Basins`
       
   # Plot -----
+      
+    ggplot(greatBasin, aes(x = wetSum, y = month, fill = as.factor(month))) +
+        geom_density_ridges() +
+        theme_ridges() +
+        theme(legend.position = "none")
+      
+    
       
     ggplot(soRockies, # --> change the regional df here so I don't have to duplicate this code. 
            aes(x = year, y = wetSum, color = as.factor(month))) +               # make month a factor so I can change the colors (it was previously viewed as a continues variable)
@@ -205,18 +243,19 @@
       
     ggplot(wetMonth, 
          aes(x = month, y = wetMean, color = (term))) +               
-      scale_color_manual(values=c("#369499", "#98554E")) +
-      geom_line(size = 1, alpha = .5) +                                       # line size and transparency
+      scale_color_manual(values=c("#369499", "#98554E")) +                      # colors of the lines
+      geom_line(size = 1, alpha = .5) +                                         # line size and transparency
       # geom_smooth(method = 'lm', size=.2) +                                   # trend line and error
-      scale_y_continuous(labels = thousands) +                                # divides units by 1000
-      theme_light() +                                                         # color theme
+      scale_y_continuous(labels = thousands) +                                  # divides units by 1000
+      theme_light() +                                                           # color theme
       ylab('Inundated hectares x 1000') + 
-      facet_wrap(~ecoHydro, ncol = 3, scales = 'free') +                         # makes a plot for each region; 3 columns; y-axis different for each graph
-      theme(strip.background =element_rect(fill="#7A7A7A")) +                 # color of graph title boxes
-      theme( axis.title.y=element_text(size=8),                               # text size
+      facet_wrap(~ecoHydro, ncol = 3, scales = 'free') +                        # makes a plot for each region; 3 columns; y-axis different for each graph
+      theme(strip.background =element_rect(fill="#7A7A7A")) +                   # color of graph title boxes
+      theme( axis.title.y=element_text(size=8),                                 # text size
              axis.title.x=element_text(size=8),
              axis.text=element_text(size=8)) + 
       ggtitle("Regional Monthly Surface Area Trend") # --> change title to mathch region
+      
  
 #-------------------------------------------------------------------------------
 # Private vs public -----
@@ -243,18 +282,39 @@
       spread(term, wetMean) %>%                           # spread the data so you can do some column math
       mutate(change = ((t1-t2)/t1)*-1)                    # calculate difference between t1 and t2 as percent
   
-    ownWilcox <- hydroTerm %>%
-      group_by(term, ownAg, ecoHydro, year) %>%
-      summarise(wetSum = sum(wetHa)) %>%
-      split(.$ecoHydro) %>%                               # '.' shorthand for the dataframe
-      map(~wilcox.test(wetSum ~ term, data = .x)) %>%     # iterates whole process over each region
-      map_df(broom::tidy, .id = 'ecoHydro')               # kicks out dataframe with p-valuves by region and season
+  # Wilcoxon Test based on ownAg -----
+    
+    # Split data by ownAg  and run test-----
+      
+      # Private -----
+      
+        privWilcox <-  hydroTerm %>%    
+          filter(ownAg == 'Private') %>%                      # filter data to only include private
+          group_by(term, ecoHydro, year) %>% 
+          summarise(wetSum = sum(wetHa)) %>% 
+          split(.$ecoHydro) %>%                               # '.' shorthand for the dataframe
+          map(~wilcox.test(wetSum ~ term, data = .x)) %>%     # iterates whole process over each region
+          map_df(broom::tidy, .id = 'ecoHydro') %>%           # kicks out dataframe with p-valuves by region and season
+          mutate(ownAg = 'Private')                           # make new column with with ownership value ('Private')
+      
+        pubWilcox <- hydroTerm %>% 
+          filter(ownAg == 'Public') %>%                       # filter data to only include public
+          group_by(term, ecoHydro, year) %>% 
+          summarise(wetSum = sum(wetHa)) %>% 
+          split(.$ecoHydro) %>%                               # '.' shorthand for the dataframe
+          map(~wilcox.test(wetSum ~ term, data = .x)) %>%     # iterates whole process over each region
+          map_df(broom::tidy, .id = 'ecoHydro') %>%           # kicks out dataframe with p-valuves by region and season
+          mutate(ownAg = 'Public')                            # make new column with with ownership value ('Public')
+    
+    # Merge Wilcoxon test with data table    
   
-    ownChange <- ownHydro %>% 
-      full_join(ownWilcox) %>%                            # combine wilcoxon results with t1, t2 diff results
-      select(ecoHydro, t1, t2, change, p.value)
+      ownChange <- privWilcox %>% 
+        full_join(pubWilcox) %>%                            
+        full_join(ownHydro) %>% 
+        select(ecoHydro, ownAg, t1, t2, change, p.value)
   
-  # Summary Stats -----  
+  # Summary Stats ----- 
+    # Can use for making error bars 
     
     # total wetHa -----
     
@@ -266,50 +326,66 @@
                   wetSD = sd(wetHa),
                   n_change = n())
   
-  # Plot -----
+  # Plots -----
+      
+    # Box Plot -----
+      
+      ownBox <- hydroTerm %>%    
+        group_by(term, ownAg, ecoHydro, year) %>%               
+        summarise(wetSum = sum(wetHa))
     
+      ownBoxPlot <- ggplot(ownBox, aes(x = term, y = wetSum, fill = ownAg)) +  
+        geom_boxplot() +
+        scale_fill_manual(values=c("#369499", "#98554E")) +  # fill color for box plots
+        facet_wrap(. ~ ecoHydro, scales = 'free') +          # creates plot for each region
+        scale_y_continuous(labels = thousands) +
+        xlab("Term") +
+        ylab("Inundated hectares x 1000") +
+        theme_bw() 
+      
     # Private water by term -----
-    ggplot(
-      subset(wetTotal, ownAg == "Private"),
-      aes(x = wetMean, y = ecoHydro, fill = term)) +
-      geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
-      geom_errorbar(aes(xmin = wetMean - wetSD, xmax = wetMean + wetSD), 
-                    width = .3, position = position_dodge(0.9), 
-                    color =  "#505050") +
-      scale_fill_manual(values=c("#56B4E9", "#E69F00")) +
-      # xlim(0, 1600000) +
-      ggtitle("Private Water by Term") +
-      xlab("wetHa") +
-      ylab("Ecohydroregion") +
-      theme(
-          panel.border = element_blank(),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.background = element_blank(),
-          axis.line = element_line(size = 0.5, linetype = "solid",
-                                   colour = "black")) 
+      
+      ggplot(
+        subset(wetTotal, ownAg == "Private"),
+        aes(x = wetMean, y = ecoHydro, fill = term)) +
+        geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
+        geom_errorbar(aes(xmin = wetMean - wetSD, xmax = wetMean + wetSD), 
+                      width = .3, position = position_dodge(0.9), 
+                      color =  "#505050") +
+        scale_fill_manual(values=c("#369499", "#98554E")) +
+        # xlim(0, 1600000) +
+        ggtitle("Private Water by Term") +
+        xlab("wetHa") +
+        ylab("Ecohydroregion") +
+        theme(
+            panel.border = element_blank(),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            panel.background = element_blank(),
+            axis.line = element_line(size = 0.5, linetype = "solid",
+                                     colour = "black")) 
     
-    # Public water by term -----
-    ggplot(
-      subset(wetTotal, ownAg == "Public"),
-      aes(x = wetMean, y = ecoHydro, fill = term)) +
-      geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
-      geom_errorbar(aes(xmin = wetMean - wetSD, xmax = wetMean + wetSD), 
-                    width = .3, position = position_dodge(0.9), 
-                    color =  "#505050") +
-      scale_fill_manual(values=c("#56B4E9", "#E69F00")) +
-      ggtitle("Public Water by Term") +
-      xlab("wetHa") +
-      ylab("Ecohydroregion") +
-      theme(
-          panel.border = element_blank(),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.background = element_blank(),
-          axis.line = element_line(size = 0.5, linetype = "solid",
-                                   colour = "black")) 
+      # Public water by term -----
+      
+        ggplot(
+          subset(wetTotal, ownAg == "Public"),
+          aes(x = wetMean, y = ecoHydro, fill = term)) +
+          geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
+          geom_errorbar(aes(xmin = wetMean - wetSD, xmax = wetMean + wetSD), 
+                        width = .3, position = position_dodge(0.9), 
+                        color =  "#505050") +
+          scale_fill_manual(values=c("#369499", "#98554E")) +
+          ggtitle("Public Water by Term") +
+          xlab("wetHa") +
+          ylab("Ecohydroregion") +
+          theme(
+              panel.border = element_blank(),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.background = element_blank(),
+              axis.line = element_line(size = 0.5, linetype = "solid",
+                                       colour = "black")) 
     
-  # Plot -----
     # Percent change by ownership -----
     
       ownHydroChange <- ownChange %>% 
@@ -317,11 +393,10 @@
       
       ggplot(ownHydroChange, aes(x = change, y = ecoHydro, fill = ownAg)) +
         geom_bar(stat="identity", position=position_dodge()) +
-        scale_fill_manual(values=c("#56B4E9", "#E69F00")) +
+        scale_fill_manual(values=c("#369499", "#98554E")) +
         ggtitle("Percent Change of Water by Ownership") +
         xlab("Percent Change") +
         ylab("Ecohydroregion") +
-        scale_x_reverse() +
         theme(legend.title = element_blank(),
             panel.border = element_blank(),
             panel.grid.major = element_blank(),
@@ -329,6 +404,27 @@
             panel.background = element_blank(),
             axis.line = element_line(size = 0.5, linetype = "solid",
                                      colour = "black")) 
+      
+      # Ownership trend lines -----
+      
+        ownTrend <- hydroTerm %>% 
+          group_by(ecoHydro, ownAg, year, term) %>%           # grouping
+          summarise(wetHa = sum(wetHa)) %>%                   # sum wetHa = total amt of H20 by ownership, year, and ecohydroregion
+          ungroup()
+      
+        ggplot(ownTrend, aes(x = year, y = wetHa, color = ownAg)) +
+          scale_color_manual(values=c("#369499", "#98554E")) +                      # colors of the lines
+          geom_line(size = 1, alpha = .5) +                                         # line size and transparency
+          # geom_smooth(method = 'lm', size=.2) +                                   # trend line and error
+          scale_y_continuous(labels = thousands) +                                  # divides units by 1000
+          theme_light() +                                                           # color theme
+          ylab('Inundated hectares x 1000') + 
+          facet_wrap(~ecoHydro, ncol = 3, scales = 'free') +                        # makes a plot for each region; 3 columns; y-axis different for each graph
+          theme(strip.background =element_rect(fill="#7A7A7A")) +                   # color of graph title boxes
+          theme( axis.title.y=element_text(size=8),                                 # text size
+                 axis.title.x=element_text(size=8),
+                 axis.text=element_text(size=8)) + 
+          ggtitle("Regional Ownership Water Trends")
 
 #-------------------------------------------------------------------------------
 # Hydroperiod -----
@@ -414,46 +510,88 @@
               panel.background = element_blank(),
               axis.line = element_line(size = 0.5, linetype = "solid",
                                        colour = "black")) 
-        
 #-------------------------------------------------------------------------------
-# sites and water
+# wetType -----
   
-  # Read in site data ----
-    
-  sites <- fread("siteNamesID.csv")
-    
-  # summarize data before join ----
+  # Overall wetType trends per Ecohydroregion -----
       
-  siteHydro <- hydroTerm %>% 
-      group_by(idPoly, year, term) %>%           
-      summarise(wetHa = sum(wetHa)) %>%     
-      ungroup() %>% 
-      left_join(sites, by = 'idPoly')
-    
-  siteHydro01 <- siteHydro %>% 
-      group_by(siteName, Latitude, Longitude, year, term) %>%
-      summarise(wetHa = sum(wetHa)) %>%
-      ungroup() %>% 
-      group_by(siteName, Latitude, Longitude, term) %>% 
-      summarise(wetMean = mean(wetHa)) %>% 
-      spread(term, wetMean) %>%                           # spread the data so you can do some column math
-      mutate(change = ((t1-t2)/t1)*-1)                    # calculate percent change and add as a new column
+    # Group -----
+      
+    typeWet <- hydroTerm %>% 
+      group_by(ecoHydro, wetType, year) %>% 
+      summarise(wetHa = sum(wetHa)) %>% 
+      ungroup() %>%
+      mutate(year = as.numeric(year))
+      
+    # Plot -----
+      
+      ggplot(typeWet, aes(x = year, y = wetHa, color = wetType)) +
+        geom_line(size = 1, alpha = .5) +                           # line size and transparency
+        scale_y_continuous(labels = thousands) +                    # divides units by 1000
+        theme_light() +                                             # color theme
+        ylab('Inundated hectares x 1000') + 
+        facet_wrap(~ecoHydro, ncol = 3, scales = 'free') +
+        theme(strip.background =element_rect(fill="#7A7A7A")) +     # color of graph title boxes
+        theme( axis.title.y=element_text(size=8), 
+               axis.title.x=element_text(size=8),
+               axis.text=element_text(size=8)) + 
+        ggtitle("Water Surface Area Trend by wetType")         
+#-------------------------------------------------------------------------------
+# sites and water: What is the overall trend at individual ibis blobs (as opposed to region)?
   
+  # Read in site data -----
+    
+    sites <- fread("01_data/09_site_names/siteNamesID.csv")
+    
+  # summarize data before join -----
+      
+    siteHydro <- hydroTerm %>% 
+        group_by(idPoly, year, term) %>%           
+        summarise(wetHa = sum(wetHa)) %>%     
+        ungroup() %>% 
+        left_join(sites, by = 'idPoly')
+  
+  # Join the data -----
+    
+    siteHydro01 <- siteHydro %>% 
+        group_by(siteName, Latitude, Longitude, year, term) %>%
+        summarise(wetHa = sum(wetHa)) %>%
+        ungroup() %>% 
+        group_by(siteName, Latitude, Longitude, term) %>% 
+        summarise(wetMean = mean(wetHa)) %>% 
+        spread(term, wetMean) %>%                           # spread the data so you can do some column math
+        mutate(change = ((t1-t2)/t1)*-1)                    # calculate percent change and add as a new column
+  
+  # Wilcoxon test ----- 
+      
+    siteWilcox <-  hydroTerm %>%    
+      group_by(term, siteName, year) %>% 
+      summarise(wetSum = sum(wetHa)) %>% 
+      split(.$siteName) %>%                               # '.' shorthand for the dataframe
+      map(~wilcox.test(wetSum ~ term, data = .x)) %>%     # iterates whole process over each region
+      map_df(broom::tidy, .id = 'siteName')               # kicks out dataframe with p-valuves by region and season
+    
+    # Merge Wilcoxon test with data table    
+  
+      siteChange <- siteHydro01 %>% 
+        full_join(siteWilcox) %>%
+        select(siteName, t1, t2, change, p.value)
+    
   # Map -----
     
     # Create a factor by which to color code the sites by -----
     # In this case, decreasing water will be red and increasing will be blue
-    
-      siteCat <- siteHydro01 %>% 
-        mutate(cat = ifelse(change < 0, 'decrease', 'increase'),
-               cat = as.factor(cat),
-               sig = ifelse(p.value < 0.05, 'yes', 'no'),
-               sig = as.factor(sig))
+      
+      siteCat <- siteChange %>% 
+        mutate(cat = case_when(change < 0 & p.value < 0.05 ~ "sigDec",
+                               change < 0 & p.value > 0.05 ~ "noDec",
+                               change > 0 & p.value < 0.05 ~ "sigInc",
+                               change > 0 & p.value > 0.05 ~ "noInc"))
     
     # Define the color palette -----
       
-      pal <- colorFactor(palette = c("#0E98A9", "#D1501C"), 
-                         levels = c("increase","decrease"))  
+      pal <- colorFactor(palette = c("#369499", "#98554E", "#00eaf2","#cc0a00"), 
+                         levels = c("noInc","noDec", "sigInc", "sigDec"))  
     
     # Read in ecohydroRegion shapefile -----
     
