@@ -24,12 +24,12 @@
 
 # Working directory -----
 
-  setwd("/Users/sc148852/Box/R/ibisSites/tablesFinal") # change site folder here
+  # setwd("/Users/sc148852/Box/R/ibisSites/tablesFinal") # change site folder here
   
 # Read in data -----
   
-  wetArea <- fread("wetAreaFin.csv")
-  hydroGra <- fread("hydroGraFin.csv")
+  wetArea <- fread("01_data/08_final_hydro_data/wetAreaFin.csv")
+  hydroGra <- fread("01_data/08_final_hydro_data/hydroGraFin.csv")
   
 #-------------------------------------------------------------------------------
 # wetHa for ecohydroregion over time -----
@@ -38,30 +38,29 @@
     
     # Group -----
   
-      wetArea01 <- (wetArea) %>% 
-        group_by(ecoHydro, year) %>% 
-        summarise(wetHa=sum(wetHa)) %>% 
-        ungroup() %>%
-        mutate(year = as.numeric(year))
+      wetArea01 <- (wetArea) %>%            # name variable
+        filter(month > 3, month < 9) %>%    # filter to April through August
+        group_by(ecoHydro, year) %>%        # select the columns you want to sum across
+        summarise(wetHa=sum(wetHa)) %>%     # sum the wetHa -> result is the total wetHa for each year in each region
+        ungroup() %>%                       # ungroup
+        mutate(year = as.numeric(year))     # make the column 'year' numeric
   
     # plot -----
   
-      wetPlot01 <- ggplot(wetArea01, aes(x = year, y = wetHa, color = ecoHydro)) +
-        scale_color_manual(values=c("#3AD394", "#932462", "#7525E1", "#17C1C1", 
+      wetPlot01 <- ggplot(wetArea01, aes(x = year, y = wetHa, color = ecoHydro)) +  
+        scale_color_manual(values=c("#3AD394", "#932462", "#7525E1", "#17C1C1",  # 
                                     "#1654E3", "#E35D16", "#8FB00B", "#E556EC", 
-                                    "#DCB102")) +                   # colors of lines
+                                    "#DCB102")) +                   # colors of lines (made to match the map I made in QGIS)
         geom_line(size = 1, alpha = .5) +                           # line size and transparency
         geom_smooth(method = 'lm', size=.2) +                       # trend line and error
         scale_y_continuous(labels = thousands) +                    # divides units by 1000
         theme_light() +                                             # color theme
         ylab('Inundated hectares x 1000') + 
-        facet_wrap(~ecoHydro, ncol = 3, scales = 'free') +
+        facet_wrap(~ecoHydro, ncol = 3, scales = 'free') +          # makes a plot for each region; 3 columns; y-axis different for each graph
         theme(strip.background =element_rect(fill="#7A7A7A")) +     # color of graph title boxes
-        theme( axis.title.y=element_text(size=8), 
+        theme( axis.title.y=element_text(size=8),                   # text size
                axis.title.x=element_text(size=8),
-               axis.text=element_text(size=8)) + #,
-               #legend.title = element_blank(),
-               #legend.position = 'bottom') +
+               axis.text=element_text(size=8)) + 
         ggtitle("Water Surface Area Trend") +
         guides(color = FALSE)                                       # removes legend
     
@@ -97,50 +96,51 @@
   
   # Create column that sorts years among two periods -----
     
-    wetArea02 <- wetArea %>% 
-      mutate(year = as.numeric(year),
+    wetTerm <- wetArea %>% 
+      filter(month > 3, month < 9) %>%                   # filter data to April - August
+      mutate(year = as.numeric(year),                    # makes the column 'year' numeric
              term = 't1',                                # creates a column called 'term' with filled with 't1'
-             term = replace(term, year >2003, 't2'))     # labels everything in 'term' as 't2' if greater than 2003
+             term = replace(term, year >2003, 't2'))     # labels everything in 'term' as 't2' if 'year' is greater than 2003
 
   # calc difference between p1 and p1 as % -----
     
-    wetChange <- wetArea02 %>%
-      group_by(term, ecoHydro, year) %>%
-      summarise(wetSum = sum(wetHa)) %>%
-      ungroup() %>%
-      group_by(term, ecoHydro) %>% 
-      summarise(wetMean = mean(wetSum)) %>%
-      spread(term, wetMean) %>% 
-      mutate(change = ((t1-t2)/t1)*-1)
-    
-    wetWilcox <- wetArea02 %>%
-      group_by(term, ecoHydro, year) %>%
-      summarise(wetSum = sum(wetHa)) %>%
-      split(.$ecoHydro) %>%                                 # '.' shorthand for the dataframe
-      map(~wilcox.test(wetSum ~ term, data = .x)) %>%       # iterates whole process over each region
+    wetChange <- wetTerm %>%
+      group_by(term, ecoHydro, year) %>%                 # Group the columns that you want to run a function over
+      summarise(wetSum = sum(wetHa)) %>%                 # summarise the grouped columns by summing wetHa
+      ungroup() %>%                                      # ungroup; the result is the total wetHa for each year, term, and region
+      group_by(term, ecoHydro) %>%                       # group again by term and region
+      summarise(wetMean = mean(wetSum)) %>%              # summarise the grouped columns by the average wetHa - this gives the avg wetHa across each term for each region
+      spread(term, wetMean) %>%                          # spread is opposite of gather: there is now a column for t1 and one for t2
+      mutate(change = ((t1-t2)/t1)*-1)                   # create column 'change' by doing column math with columns 't1' and 't2'
+                                                         # The final result is a table with a column with the percent change from t1 to t2
+    wetWilcoxTest <- wetTerm %>%
+      group_by(term, ecoHydro, year) %>%                    # group by term, region, and year - function will run across these groups
+      summarise(wetSum = sum(wetHa)) %>%                    # summarise the above groups by sum - the result is the total wetHa for each year for each region and term
+      split(.$ecoHydro) %>%                                 # '.' shorthand for the dataframe - splits the data by region
+      map(~wilcox.test(wetSum ~ term, data = .x)) %>%       # iterates whole process over each region (calculates the mean and tests for difference)
       map_df(broom::tidy, .id = 'ecoHydro')                 # kicks out dataframe with p-valuves by region and season
     
   # combine wilcoxon results with p1, p2 diff results -----
     
-    wetWilcox01 <- wetChange %>% 
-      full_join(wetWilcox) %>%                            
-      select(ecoHydro, t1, t2, change, p.value) 
+    wetWilcoxChange <- wetChange %>% 
+      full_join(wetWilcoxTest) %>%                      # merge the Wilcoxon test results to the wetChange df     
+      select(ecoHydro, t1, t2, change, p.value)         # select the columns that you want to keep
     
-  # make box plots to show distibutions between p1 nad p2 surface water -----
+  # make box plots to show distibutions between t1 nad t2 surface water -----
   
-    wetBox <- wetArea02 %>%
-      group_by(term, ecoHydro, year) %>%
+    wetBox <- wetTerm %>%    
+      group_by(term, ecoHydro, year) %>%                # data for the box plot -> wetHa summed for each year and each region with term labels
       summarise(wetSum = sum(wetHa))
     
-    wetBoxPlot <- ggplot(wetBox, aes(x = term, y = wetSum, group = term, fill = term)) +
+    wetBoxPlot <- ggplot(wetBox, aes(x = term, y = wetSum, group = term, fill = term)) +  
       geom_boxplot() +
-      scale_fill_manual(values=c("#56B4E9", "#E69F00")) +
-      facet_wrap(. ~ ecoHydro, scales = 'free') +
+      scale_fill_manual(values=c("#56B4E9", "#E69F00")) +  # fill color for box plots
+      facet_wrap(. ~ ecoHydro, scales = 'free') +          # creates plot for each region
       scale_y_continuous(labels = thousands) +
       xlab("Term") +
       ylab("Inundated hectares x 1000") +
       theme_bw() 
-      # how to remove legend? It's redundant. 
+
 #-------------------------------------------------------------------------------
 # Private vs public -----
 # Find the avg amt of water for public/private in each ecohydroregion -----
