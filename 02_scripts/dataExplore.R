@@ -134,13 +134,90 @@
     
     wetBoxPlot <- ggplot(wetBox, aes(x = term, y = wetSum, group = term, fill = term)) +  
       geom_boxplot() +
-      scale_fill_manual(values=c("#56B4E9", "#E69F00")) +  # fill color for box plots
+      scale_fill_manual(values=c("#369499", "#98554E")) +  # fill color for box plots
       facet_wrap(. ~ ecoHydro, scales = 'free') +          # creates plot for each region
       scale_y_continuous(labels = thousands) +
       xlab("Term") +
       ylab("Inundated hectares x 1000") +
       theme_bw() 
+    
+#-------------------------------------------------------------------------------
+# Monthly water by region -----
+   
+  # Add term to dataframe; sum over region, year, month, and term
+  # This gives the total wetHa for each month in each year for each region -----
+  
+    wetTermMonth <- wetArea %>%                  
+        mutate(year = as.numeric(year),                      # makes the column 'year' numeric
+               term = 't1',                                  # creates a column called 'term' with filled with 't1'
+               term = replace(term, year >2003, 't2')) %>%   # labels everything in 'term' as 't2' if 'year' is greater than 2003
+      group_by(term, ecoHydro, year, month) %>%              # Group the columns that you want to summarise over
+      summarise(wetSum = sum(wetHa))
+      
+  # Create separate table for each ecohydroregion -----
+    # (an alternative to this looping is to subset the data when making the ggplot)
+    
+    for(i in unique(wetTermMonth$ecoHydro)) {                # for each unique value in the 'ecoHydro' column...
+      nam <- paste("df", i, sep = ".")                       # create variable 'nam' and rename to 'df.i' where i corresponds to a unique value in 'ecoHydro'
+      assign(nam, wetTermMonth[wetTermMonth$ecoHydro==i,])   # assign to 'nam' a subset of the original dataframe. The subset is for a unique value of 'ecoHydro'
+    }
+    
+    # rename these dataframes so they are easier to call -----
+    
+      greatBasin <- `df.Great Basin-Colorado Plateau`
+      midRockies <- `df.Middle Rockies`
+      mojaveDes <- `df.Mojave-Sanoran Deserts`
+      norPlains <- `df.Northern Plains`
+      norRockies <- `df.Northern Rockies`
+      pacificNW <- `df.Pacific NW`
+      pacificSW <- `df.Pacific SW`
+      soPlains <- `df.Southern Plains`
+      soRockies <- `df.Southern Rockies and Basins`
+      
+  # Plot -----
+      
+    ggplot(soRockies, # --> change the regional df here so I don't have to duplicate this code. 
+           aes(x = year, y = wetSum, color = as.factor(month))) +               # make month a factor so I can change the colors (it was previously viewed as a continues variable)
+      scale_color_manual(values=c("#3AD394", "#932462", "#7525E1", "#17C1C1",   # new colors for each month
+                                    "#1654E3", "#E35D16", "#8FB00B", "#E556EC")) +                   
+        geom_line(size = 1, alpha = .5) +                                       # line size and transparency
+        geom_smooth(method = 'lm', size=.2) +                                   # trend line and error
+        scale_y_continuous(labels = thousands) +                                # divides units by 1000
+        theme_light() +                                                         # color theme
+        ylab('Inundated hectares x 1000') + 
+        facet_wrap(~month, ncol = 8, scales = 'fixed') +                         # makes a plot for each region; 3 columns; y-axis different for each graph
+        theme(strip.background =element_rect(fill="#7A7A7A")) +                 # color of graph title boxes
+        theme( axis.title.y=element_text(size=8),                               # text size
+               axis.title.x=element_text(size=8),
+               axis.text=element_text(size=8)) + 
+        ggtitle("Southern Rockies \n Monthly Surface Area Trend") + # --> change title to mathch region
+        guides(color = FALSE)  
 
+# How has monthly water changed from t1 to t2? -----
+  
+  # find the mean amount of water for t1 and for t2 for each month -----   
+   
+    wetMonth <- wetTermMonth %>% 
+        group_by(term, month, ecoHydro) %>%         # group by month, term, and region
+        summarise(wetMean = mean(wetSum))           # find the mean wetHa for each month in each region for each term
+    
+  # Plot time series of average monthly water for t1 and t2 -----
+      
+    ggplot(wetMonth, 
+         aes(x = month, y = wetMean, color = (term))) +               
+      scale_color_manual(values=c("#369499", "#98554E")) +
+      geom_line(size = 1, alpha = .5) +                                       # line size and transparency
+      # geom_smooth(method = 'lm', size=.2) +                                   # trend line and error
+      scale_y_continuous(labels = thousands) +                                # divides units by 1000
+      theme_light() +                                                         # color theme
+      ylab('Inundated hectares x 1000') + 
+      facet_wrap(~ecoHydro, ncol = 3, scales = 'free') +                         # makes a plot for each region; 3 columns; y-axis different for each graph
+      theme(strip.background =element_rect(fill="#7A7A7A")) +                 # color of graph title boxes
+      theme( axis.title.y=element_text(size=8),                               # text size
+             axis.title.x=element_text(size=8),
+             axis.text=element_text(size=8)) + 
+      ggtitle("Regional Monthly Surface Area Trend") # --> change title to mathch region
+ 
 #-------------------------------------------------------------------------------
 # Private vs public -----
 # Find the avg amt of water for public/private in each ecohydroregion -----
