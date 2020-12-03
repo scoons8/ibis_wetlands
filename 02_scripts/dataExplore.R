@@ -34,34 +34,25 @@
   
 #-------------------------------------------------------------------------------
 # Extra data-cleaning that has arisen as I explore the code -----
+
+  # Filter out wetType = 'res'  -----
   
-  wetArea <- wetArea %>% 
-    filter(wetType != 'res') %>% 
-    mutate(month2 = case_when(month == '3' ~ 'Mar',
-                               month == '4' ~ 'Apr',
-                               month == '5' ~ 'May',
-                               month == '6' ~ 'Jun',
-                               month == '7' ~ 'Jul',
-                               month == '8' ~ 'Aug',
-                               month == '9' ~ 'Sept',
-                               month == '10' ~ 'Oct'))
+    wetArea <- wetArea %>%
+      filter(wetType != 'res')
   
-  hydroGra <- hydroGra %>%
-    filter(wetType != 'res') %>% 
-    mutate(month = case_when(month == '3' ~ 'Mar',
-                               month == '4' ~ 'Apr',
-                               month == '5' ~ 'May',
-                               month == '6' ~ 'Jun', 
-                               month == '7' ~ 'Jul',
-                               month == '8' ~ 'Aug',
-                               month == '9' ~ 'Sept',
-                               month == '10' ~ 'Oct'))
+    hydroGra <- hydroGra %>%
+      filter(wetType != 'res')
+    
+  # write files to folder -----
   
-  fwrite(wetArea, '01_data/08_final_hydro_data/wetAreaFin02.csv')
-  fwrite(hydroGra, '01_data/08_final_hydro_data/hydroGraFin02.csv')
-  
-  wetArea <- fread('01_data/08_final_hydro_data/wetAreaFin02.csv')
-  hydroGra <- fread('01_data/08_final_hydro_data/hydroGraFin02.csv')
+    fwrite(wetArea, '01_data/08_final_hydro_data/wetAreaFin02.csv')
+    fwrite(hydroGra, '01_data/08_final_hydro_data/hydroGraFin02.csv')
+    
+  # read back in newest / cleanest data -----
+ 
+  # wetArea <- fread('01_data/08_final_hydro_data/wetAreaFin02.csv')
+  # hydroGra <- fread('01_data/08_final_hydro_data/hydroGraFin02.csv')
+    
 #-------------------------------------------------------------------------------
 # wetHa for ecohydroregion over time -----
   
@@ -183,7 +174,15 @@
                term = 't1',                                  # creates a column called 'term' with filled with 't1'
                term = replace(term, year >2003, 't2')) %>%   # labels everything in 'term' as 't2' if 'year' is greater than 2003
       group_by(term, ecoHydro, year, month) %>%              # Group the columns that you want to summarise over
-      summarise(wetSum = sum(wetHa))
+      summarise(wetSum = sum(wetHa)) %>% 
+      mutate(month = case_when(month == '3' ~ 'Mar',
+                               month == '4' ~ 'Apr',
+                               month == '5' ~ 'May',
+                               month == '6' ~ 'Jun',
+                               month == '7' ~ 'Jul',
+                               month == '8' ~ 'Aug',
+                               month == '9' ~ 'Sept',
+                               month == '10' ~ 'Oct'))
       
   # Create separate table for each ecohydroregion -----
     # (an alternative to this looping is to subset the data when making the ggplot)
