@@ -15,6 +15,7 @@
   library('sf')
   library('sp')
   library('ggridges')
+  library('gridExtra')
 
 # Functions -----
   
@@ -29,8 +30,8 @@
   
 # Read in data -----
   
-  wetArea <- fread("01_data/08_final_hydro_data/wetAreaFin.csv")
-  hydroGra <- fread("01_data/08_final_hydro_data/hydroGraFin.csv")
+  # wetArea <- read_csv("01_data/08_final_hydro_data/wetAreaFin.csv")
+  # hydroGra <- read_csv("01_data/08_final_hydro_data/hydroGraFin.csv")
   
 #-------------------------------------------------------------------------------
 # Extra data-cleaning that has arisen as I explore the code -----
@@ -50,8 +51,8 @@
     
   # read back in newest / cleanest data -----
  
-  # wetArea <- fread('01_data/08_final_hydro_data/wetAreaFin02.csv')
-  # hydroGra <- fread('01_data/08_final_hydro_data/hydroGraFin02.csv')
+    wetArea <- fread('01_data/08_final_hydro_data/wetAreaFin02.csv')
+    hydroGra <- fread('01_data/08_final_hydro_data/hydroGraFin02.csv')
     
 #-------------------------------------------------------------------------------
 # wetHa for ecohydroregion over time -----
@@ -206,29 +207,120 @@
       
   # Plot -----
       
-    ggplot(greatBasin, aes(x = wetSum, y = month, fill = as.factor(month))) +
-        geom_density_ridges() +
-        theme_ridges() +
-        theme(legend.position = "none")
+    # Ridgeline Plots -----
       
+     GBridge <- greatBasin %>%                                                  # Call on greatBasin df
+        arrange(wetSum) %>%                                                     # arrange the data according to wetSum (not sure this step is necessary)
+        mutate(month = factor(month, levels = c("Oct", "Sept", "Aug", "Jul", "Jun", "May", "Apr", "Mar"))) %>%   # change the order of month column for plotting
+        ggplot( aes(x = wetSum, y = month, fill = as.factor(month))) +          # I may not need the 'as.factor' now that I've changed the months from integers to strings
+                  geom_density_ridges() +
+                  theme_ridges() +
+                  theme(legend.position = "none") +
+                  labs(title = "Great Basin") +
+                  xlab("wet hectares") +
+                  facet_wrap(~term, ncol = 1, scales = 'fixed')   
+      
+      MRridge <- midRockies %>% 
+        arrange(wetSum) %>% 
+        mutate(month = factor(month, levels = c("Oct", "Sept", "Aug", "Jul", "Jun", "May", "Apr", "Mar"))) %>% 
+        ggplot( aes(x = wetSum, y = month, fill = as.factor(month))) +
+                  geom_density_ridges() +
+                  theme_ridges() +
+                  theme(legend.position = "none") +
+                  labs(title = "Middle Rockies") +
+                  xlab("wet hectares") +
+                  facet_wrap(~term, ncol = 1, scales = 'fixed') 
+      
+      NPridge <- norPlains %>% 
+        arrange(wetSum) %>% 
+        mutate(month = factor(month, levels = c("Oct", "Sept", "Aug", "Jul", "Jun", "May", "Apr", "Mar"))) %>% 
+        ggplot( aes(x = wetSum, y = month, fill = as.factor(month))) +
+                  geom_density_ridges() +
+                  theme_ridges() +
+                  theme(legend.position = "none") +
+                  labs(title = "Northern Plains") +
+                  xlab("wet hectares") +
+                  facet_wrap(~term, ncol = 1, scales = 'fixed') 
+                
+      NRridge <- norRockies %>% 
+        arrange(wetSum) %>% 
+        mutate(month = factor(month, levels = c("Oct", "Sept", "Aug", "Jul", "Jun", "May", "Apr", "Mar"))) %>% 
+        ggplot( aes(x = wetSum, y = month, fill = as.factor(month))) +
+                  geom_density_ridges() +
+                  theme_ridges() +
+                  theme(legend.position = "none") +
+                  labs(title = "Northern Rockies") +
+                  xlab("wet hectares") +
+                  facet_wrap(~term, ncol = 1, scales = 'fixed') 
+      
+      PNWridge <- pacificNW %>% 
+        arrange(wetSum) %>% 
+        mutate(month = factor(month, levels = c("Oct", "Sept", "Aug", "Jul", "Jun", "May", "Apr", "Mar"))) %>% 
+        ggplot( aes(x = wetSum, y = month, fill = as.factor(month))) +
+                    geom_density_ridges() +
+                    theme_ridges() +
+                    theme(legend.position = "none") +
+                    labs(title = "Pacific NW") +
+                    xlab("wet hectares") +
+                    facet_wrap(~term, ncol = 1, scales = 'fixed') 
+      
+      SPridge <- soPlains %>% 
+        arrange(wetSum) %>% 
+        mutate(month = factor(month, levels = c("Oct", "Sept", "Aug", "Jul", "Jun", "May", "Apr", "Mar"))) %>% 
+        ggplot( aes(x = wetSum, y = month, fill = as.factor(month))) +
+                    geom_density_ridges() +
+                    theme_ridges() +
+                    theme(legend.position = "none") +
+                    labs(title = "South Plains") +
+                    xlab("wet hectares") +
+                    facet_wrap(~term, ncol = 1, scales = 'fixed')
+      
+      SRridge <- soRockies %>% 
+        arrange(wetSum) %>% 
+        mutate(month = factor(month, levels = c("Oct", "Sept", "Aug", "Jul", "Jun", "May", "Apr", "Mar"))) %>% 
+        ggplot( aes(x = wetSum, y = month, fill = as.factor(month))) +
+                    geom_density_ridges() +
+                    theme_ridges() +
+                    theme(legend.position = "none") +
+                    labs(title = "South Rockies") +
+                    xlab("wet hectares") +
+                    facet_wrap(~term, ncol = 1, scales = 'fixed')
+      
+      MSridge <- mojaveDes %>% 
+        arrange(wetSum) %>% 
+        mutate(month = factor(month, levels = c("Oct", "Sept", "Aug", "Jul", "Jun", "May", "Apr", "Mar"))) %>% 
+         ggplot( aes(x = wetSum, y = month, fill = as.factor(month))) +
+                    geom_density_ridges() +
+                    theme_ridges() +
+                    theme(legend.position = "none") +
+                    labs(title = "Mojave-Sonoran Desert") +
+                    xlab("wet hectares") +
+                    facet_wrap(~term, ncol = 1, scales = 'fixed')
+      
+      # Plot all of the ridge plots on one panel -----
+      
+        grid.arrange(arrangeGrob(GBridge, NRridge, MRridge, SRridge, ncol = 4),
+                     arrangeGrob(NPridge, SPridge, PNWridge, MSridge, ncol = 4),
+                     nrow = 2)
     
-      
-    ggplot(soRockies, # --> change the regional df here so I don't have to duplicate this code. 
-           aes(x = year, y = wetSum, color = as.factor(month))) +               # make month a factor so I can change the colors (it was previously viewed as a continues variable)
-      scale_color_manual(values=c("#3AD394", "#932462", "#7525E1", "#17C1C1",   # new colors for each month
-                                    "#1654E3", "#E35D16", "#8FB00B", "#E556EC")) +                   
-        geom_line(size = 1, alpha = .5) +                                       # line size and transparency
-        geom_smooth(method = 'lm', size=.2) +                                   # trend line and error
-        scale_y_continuous(labels = thousands) +                                # divides units by 1000
-        theme_light() +                                                         # color theme
-        ylab('Inundated hectares x 1000') + 
-        facet_wrap(~month, ncol = 8, scales = 'fixed') +                         # makes a plot for each region; 3 columns; y-axis different for each graph
-        theme(strip.background =element_rect(fill="#7A7A7A")) +                 # color of graph title boxes
-        theme( axis.title.y=element_text(size=8),                               # text size
-               axis.title.x=element_text(size=8),
-               axis.text=element_text(size=8)) + 
-        ggtitle("Southern Rockies \n Monthly Surface Area Trend") + # --> change title to mathch region
-        guides(color = FALSE)  
+    # Line Graph -----
+    
+      ggplot(soRockies, # --> change the regional df here so I don't have to duplicate this code. 
+             aes(x = year, y = wetSum, color = as.factor(month))) +               # make month a factor so I can change the colors (it was previously viewed as a continues variable)
+        scale_color_manual(values=c("#3AD394", "#932462", "#7525E1", "#17C1C1",   # new colors for each month
+                                      "#1654E3", "#E35D16", "#8FB00B", "#E556EC")) +                   
+          geom_line(size = 1, alpha = .5) +                                       # line size and transparency
+          geom_smooth(method = 'lm', size=.2) +                                   # trend line and error
+          scale_y_continuous(labels = thousands) +                                # divides units by 1000
+          theme_light() +                                                         # color theme
+          ylab('Inundated hectares x 1000') + 
+          facet_wrap(~month, ncol = 8, scales = 'fixed') +                         # makes a plot for each region; 3 columns; y-axis different for each graph
+          theme(strip.background =element_rect(fill="#7A7A7A")) +                 # color of graph title boxes
+          theme( axis.title.y=element_text(size=8),                               # text size
+                 axis.title.x=element_text(size=8),
+                 axis.text=element_text(size=8)) + 
+          ggtitle("Southern Rockies \n Monthly Surface Area Trend") + # --> change title to mathch region
+          guides(color = FALSE)  
 
 # How has monthly water changed from t1 to t2? -----
   
@@ -253,8 +345,14 @@
       theme( axis.title.y=element_text(size=8),                                 # text size
              axis.title.x=element_text(size=8),
              axis.text=element_text(size=8)) + 
-      ggtitle("Regional Monthly Surface Area Trend") # --> change title to mathch region
-      
+      ggtitle("Regional Monthly Surface Area Trend") 
+    
+  # Find the percent change for each month from t1 to t2 -----
+
+    monthPercentChange <- wetMonth %>%              
+      spread(term, wetMean) %>%                        
+      mutate(change = ((t1-t2)/t1)*-1)  
+    
  
 #-------------------------------------------------------------------------------
 # Private vs public -----
