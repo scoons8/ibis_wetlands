@@ -353,7 +353,6 @@
       spread(term, wetMean) %>%                        
       mutate(change = ((t1-t2)/t1)*-1)  
     
- 
 #-------------------------------------------------------------------------------
 # Private vs public -----
 # Find the avg amt of water for public/private in each ecohydroregion -----
@@ -489,7 +488,7 @@
         gather(Term, wetHa, 't1', 't2')
       
       ggplot(ownHydroChange, aes(x = change, y = ecoHydro, fill = ownAg)) +
-        geom_bar(stat="identity", position=position_dodge()) +
+        geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
         scale_fill_manual(values=c("#369499", "#98554E")) +
         ggtitle("Percent Change of Water by Ownership") +
         xlab("Percent Change") +
@@ -575,12 +574,13 @@
       ggplot(
         subset(wetPeriod03, term == 't1'),
         aes(x = period, y = proportion, fill = owner)) +
-        geom_bar(stat="identity", position=position_dodge()) +
-        facet_wrap(. ~ ecoHydro, scales = 'free') +
-        scale_fill_manual(values=c("#56B4E9", "#E69F00")) +
-        ggtitle("Hydroperiod and Ownership, T1") +
-        xlab("wetHa") +
-        ylab("Ecohydroregion") +
+        geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
+        ylim(0, 1.0) +
+        facet_wrap(. ~ ecoHydro, scales = 'fixed') +
+        scale_fill_manual(values=c("#369499", "#98554E")) +
+        ggtitle("Hydroperiod and Ownership, T1 (1988-2003)") +
+        xlab("Hydroperiod") +
+        ylab("Proportion of Surface Water") +
         theme(
             panel.border = element_blank(),
             panel.grid.major = element_blank(),
@@ -594,12 +594,74 @@
       ggplot(
           subset(wetPeriod03, term == 't2'),
           aes(x = period, y = proportion, fill = owner)) +
-          geom_bar(stat="identity", position=position_dodge()) +
-          facet_wrap(. ~ ecoHydro, scales = 'free') +
-          scale_fill_manual(values=c("#56B4E9", "#E69F00")) +
-          ggtitle("Hydroperiod and Ownership, T2") +
-          xlab("wetHa") +
-          ylab("Ecohydroregion") +
+          geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
+          ylim(0, 1.0) +
+          facet_wrap(. ~ ecoHydro, scales = 'fixed') +
+          scale_fill_manual(values=c("#369499", "#98554E")) +
+          ggtitle("Hydroperiod and Ownership, T2 (2004-2020)") +
+          xlab("Hydroperiod") +
+          ylab("Proportion of Surface Water") +
+          theme(
+              panel.border = element_blank(),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.background = element_blank(),
+              axis.line = element_line(size = 0.5, linetype = "solid",
+                                       colour = "black")) 
+
+#-------------------------------------------------------------------------------      
+# Hydroperiod vs wetType -----
+# What is the proportion of each hydroperiod for each wetType? -----
+    
+    wetPeriod04 <- hydroTerm %>% 
+      group_by(ecoHydro, wetType, period, year, term) %>%           
+      summarise(wetHa = sum(wetHa)) %>%                   # sum wetHa = total amt of H20 by ownership, year, and ecohydroregion
+      ungroup() %>% 
+      group_by(term, wetType, ecoHydro, period) %>%                 
+      summarise(wetMean = mean(wetHa)) %>%                 # take the mean of summed wetHa
+      spread(period, wetMean) %>%                           # spread the data so you can do some column math
+      mutate(temporary = (temp/(temp + seasonal + semi)),            # Columns giving the percentage of temp, semi, and seasonal
+             seasonal = (seasonal/(temp + seasonal + semi)),
+             semipermanent = (semi/(temp + seasonal + semi)))
+      
+    wetPeriod05 <- wetPeriod04 %>% 
+      # gather(ownAg, wetHa, 'Private', 'Public') %>% 
+      gather(hydroPer, proportion, 'temporary', 'seasonal', 'semipermanent') %>% 
+      select(term, ecoHydro, wetType, hydroPer, proportion)
+    
+    # Plot -----
+    # t1 -----
+    
+      ggplot(
+        subset(wetPeriod05, term == 't1'),
+        aes(x = wetType, y = proportion, fill = hydroPer)) +
+        geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
+        ylim(0, 1.0) +
+        facet_wrap(. ~ ecoHydro, scales = 'fixed') +
+        scale_fill_manual(values=c("#369499", "#98554E", "#D7E569")) +
+        ggtitle("Hydroperiod and Wetland Type, T1 (1988-2003)") +
+        xlab("Hydroperiod") +
+        ylab("Proportion of Surface Water") +
+        theme(
+            panel.border = element_blank(),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            panel.background = element_blank(),
+            axis.line = element_line(size = 0.5, linetype = "solid",
+                                     colour = "black")) 
+    
+    # t2 -----
+    
+      ggplot(
+          subset(wetPeriod05, term == 't2'),
+          aes(x = wetType, y = proportion, fill = hydroPer)) +
+          geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
+          ylim(0, 1.0) +
+          facet_wrap(. ~ ecoHydro, scales = 'fixed') +
+          scale_fill_manual(values=c("#369499", "#98554E", "#D7E569")) +
+          ggtitle("Hydroperiod and Wetland Type, T2 (2004-2020)") +
+          xlab("Hydroperiod") +
+          ylab("Proportion of Surface Water") +
           theme(
               panel.border = element_blank(),
               panel.grid.major = element_blank(),
@@ -632,7 +694,74 @@
         theme( axis.title.y=element_text(size=8), 
                axis.title.x=element_text(size=8),
                axis.text=element_text(size=8)) + 
-        ggtitle("Water Surface Area Trend by wetType")         
+        ggtitle("Water Surface Area Trend by wetType")   
+    
+#-------------------------------------------------------------------------------      
+# Ownership vs wetType -----
+# What is the proportion of each hydroperiod for each wetType? -----
+    
+    wetPeriod06 <- hydroTerm %>% 
+      group_by(ecoHydro, wetType, ownAg, year, term) %>%           
+      summarise(wetHa = sum(wetHa)) %>%                   # sum wetHa = total amt of H20 by ownership, year, and ecohydroregion
+      ungroup() %>% 
+      group_by(term, wetType, ecoHydro, ownAg) %>%                 
+      summarise(wetMean = mean(wetHa)) %>%                 # take the mean of summed wetHa
+      spread(ownAg, wetMean) %>%                          # spread the data so you can do some column math
+      mutate_all(~replace(., is.na(.), 0)) %>%            # make NA's zeros (some places didn't have private WetMan, for example)
+      mutate(Pub = (Public/(Public + Private)),  
+             Pri = (Private/(Public + Private)))
+      
+    wetPeriod07 <- wetPeriod06 %>% 
+      gather(owner, proportion, 'Pri', 'Pub') %>% 
+      select(term, ecoHydro, wetType, owner, proportion)
+    
+    # Plot -----
+    
+    # Set y- axis for each facet wrap
+      
+      # scales_y <- list(
+      #   `Great Basin-Colorado Plateau` = scale_y_continuous(limits = c(0, ), breaks = seq(5, 25, 5)),
+      #   `f` = scale_y_continuous(limits = c(0, 40), breaks = seq(0, 40, 10)),
+      #   `r` = scale_y_continuous(limits = c(10, 20), breaks = seq(10, 20, 2))
+      # )
+    
+    # t1 -----
+    
+      ggplot(
+        subset(wetPeriod07, term == 't1'),
+        aes(x = wetType, y = proportion, fill = owner)) +
+        geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
+        facet_wrap(. ~ ecoHydro, scales = 'fixed') +
+        scale_fill_manual(values=c("#369499", "#98554E")) +
+        ggtitle("Ownership and WetType, T1") +
+        xlab("Wetland Type") +
+        ylab("Proportion of Surface Water") +
+        theme(
+            panel.border = element_blank(),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            panel.background = element_blank(),
+            axis.line = element_line(size = 0.5, linetype = "solid",
+                                     colour = "black")) 
+    
+    # t2 -----
+    
+      ggplot(
+          subset(wetPeriod07, term == 't2'),
+          aes(x = wetType, y = proportion, fill = owner)) +
+          geom_bar(stat="identity", position=position_dodge(), color = "#505050") +
+          facet_wrap(. ~ ecoHydro, scales = 'fixed') +
+          scale_fill_manual(values=c("#369499", "#98554E")) +
+          ggtitle("Ownership and WetType, T2") +
+          xlab("Wetland Type") +
+          ylab("Proportion of Surface Water") +
+          theme(
+              panel.border = element_blank(),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.background = element_blank(),
+              axis.line = element_line(size = 0.5, linetype = "solid",
+                                       colour = "black")) 
 #-------------------------------------------------------------------------------
 # sites and water: What is the overall trend at individual ibis blobs (as opposed to region)?
   
@@ -661,8 +790,8 @@
   
   # Wilcoxon test ----- 
       
-    siteWilcox <-  hydroTerm %>%    
-      group_by(term, siteName, year) %>% 
+    siteWilcox <-  siteHydro %>%    
+      group_by(term, siteName, Latitude, Longitude, year) %>% 
       summarise(wetSum = sum(wetHa)) %>% 
       split(.$siteName) %>%                               # '.' shorthand for the dataframe
       map(~wilcox.test(wetSum ~ term, data = .x)) %>%     # iterates whole process over each region
@@ -718,8 +847,126 @@
                        color = ~pal(cat),
                        fillOpacity = 0.8) %>% 
       addLegend("bottomright", pal = pal, values = ~cat, title = "Trend")
-  
 
+#-------------------------------------------------------------------------------
+# sites and hydroperiod: 
+# What are the hydroperiod trends at individual ibis blobs?
+
+  # summarize data and then join -----
+      
+    sitePer <- hydroTerm %>% 
+        group_by(idPoly, year, period, term) %>%           
+        summarise(wetHa = sum(wetHa)) %>%     
+        ungroup() %>% 
+        left_join(sites, by = 'idPoly')
+  
+  # calculate mean amt of water per hydroperiod per term per site plus % change -----
+    
+    sitePer01 <- sitePer %>% 
+        group_by(siteName, Latitude, Longitude, year, period, term) %>%
+        summarise(wetHa = sum(wetHa)) %>%
+        ungroup() %>% 
+        group_by(siteName, Latitude, Longitude, period, term) %>% 
+        summarise(wetMean = mean(wetHa)) %>% 
+        spread(term, wetMean) %>%                          
+        mutate(change = ((t1-t2)/t1)*-1)
+ 
+  # Wilcoxon test for each hydro period  ----- 
+    
+    # Temporary wetlands -----  
+      
+      tempWilcox <- sitePer %>%
+        filter(period == 'temp') %>%                       
+        group_by(term, Latitude, Longitude, siteName, year) %>%
+        summarise(wetSum = sum(wetHa)) %>%
+        split(.$Latitude) %>%                          # Used 'Latitude' instead of 'siteName' b/c all latitudes are unique but some siteNames are duplicated 
+        map(~wilcox.test(wetSum ~ term, data = .x)) %>%    
+        map_df(broom::tidy, .id = 'Latitude') %>%           
+        mutate(period = 'temp',
+               Latitude = as.numeric(Latitude))                           
+
+    # Seasonal wetlands ----- 
+      
+      seasWilcox <- sitePer %>%
+        filter(period == 'seasonal') %>%                     
+        group_by(term,  Latitude, Longitude, siteName, year) %>%
+        summarise(wetSum = sum(wetHa)) %>%
+        split(.$Latitude) %>%                               
+        map(~wilcox.test(wetSum ~ term, data = .x)) %>%     
+        map_df(broom::tidy, .id = 'Latitude') %>%          
+        mutate(period = 'seasonal',
+                Latitude = as.numeric(Latitude))
+      
+    # semi-perm wetlands ----- 
+
+      semiWilcox <- sitePer %>%
+        filter(period == 'semi') %>%                       
+        group_by(term, Latitude, Longitude, siteName, year) %>%
+        summarise(wetSum = sum(wetHa)) %>%
+        split(.$Latitude) %>%                               
+        map(~wilcox.test(wetSum ~ term, data = .x)) %>%    
+        map_df(broom::tidy, .id = 'Latitude') %>%           
+        mutate(period = 'semi',
+                Latitude = as.numeric(Latitude))                          
+
+    # Merge Wilcoxon test with data table 
+    
+      perChange <- tempWilcox %>%
+        full_join(seasWilcox) %>%
+        full_join(semiWilcox) %>%
+        full_join(sitePer01, by = c('Latitude', 'period')) %>%  # join by both latitude and period
+        select(siteName, Latitude, Longitude, period, t1, t2, change, p.value)
+      
+      perChange01 <- na.omit(perChange)      # remove the rows that have NA's (I don't know where these rows came from but their values are small)
+      
+  # Map -----
+    
+    # Create a factor by which to color code the sites by -----
+    # In this case, decreasing water will be red and increasing will be blue
+      
+      perCat <- perChange01 %>% 
+        mutate(cat = case_when(change < 0 & p.value < 0.05 ~ "sigDec",
+                               change < 0 & p.value > 0.05 ~ "noDec",
+                               change > 0 & p.value < 0.05 ~ "sigInc",
+                               change > 0 & p.value > 0.05 ~ "noInc"))
+    
+    # Define the color palette -----
+      
+      pal02 <- colorFactor(palette = c("#369499", "#98554E", "#00eaf2","#cc0a00"), 
+                         levels = c("noInc","noDec", "sigInc", "sigDec"))
+    
+    # Create the leaflet map with the site locations -----
+      
+      tempCat <- perCat %>% 
+        filter(period =='temp')
+      
+      seasCat <- perCat %>% 
+        filter(period == 'seasonal')
+      
+      permCat <- perCat %>% 
+        filter(period == 'semi')
+    
+      leaflet(data = permCat) %>%  # <-- change the hydroperiod being used here
+      addProviderTiles(providers$Esri.WorldGrayCanvas) %>%     
+      setView(lng = -121.7373, lat = 41.9875, zoom = 5) %>% 
+      addPolygons(data = ecoHydrodWGS,
+                color = "slategray", weight = 2, smoothFactor = 0.2,
+                opacity = 0.3, fillOpacity = 0.5,
+                fillColor = 'transparent',
+                stroke = T) %>% 
+      addCircleMarkers(label = ~siteName, 
+                       labelOptions = labelOptions(noHide = F, 
+                                                   direction = 'left',    
+                                                   textOnly = T,          
+                                                   offset=c(-10,-5)),    
+                       radius = 6,
+                       stroke = FALSE,
+                       color = ~pal02(cat),
+                       fillOpacity = 0.8) %>% 
+      addLegend("bottomright", pal = pal, values = ~cat, title = "Trend")
+
+      
+      
     
     
   
