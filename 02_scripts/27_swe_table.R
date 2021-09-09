@@ -27,7 +27,7 @@
   
   # Read in data -----
   
-    RF<-fread('01_data/11_RF_vars_clean/RFvars05.csv')
+    RF<-fread('01_data/11_RF_vars_clean/RFvars06.csv')
   
   # Reformat -----
   
@@ -151,7 +151,7 @@
       filter(p.value < 0.05)  # 0 significant results
     
     lSig <- swe09 %>% 
-      filter(pValue_lm < 0.05) # 2 significant results
+      filter(pValue_lm < 0.05) # 0 significant results
     
   # Number of total HUCs in each ecoregion ------
     

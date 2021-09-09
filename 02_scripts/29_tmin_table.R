@@ -27,7 +27,7 @@
   
   # Read in data -----
   
-    RF<-fread('01_data/11_RF_vars_clean/RFvars05.csv')
+    RF<-fread('01_data/11_RF_vars_clean/RFvars06.csv')
   
   # Reformat -----
   
