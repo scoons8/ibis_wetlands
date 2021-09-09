@@ -1,0 +1,8 @@
+Wetland Type,Description,Total Area (Hectares)
+res,Reservoir: Large bodies of water including lakes and reservoirs.,271287.1204
+riv,Riverine: Riperian and riverine systems.,118216.6655
+wet,Natural wetland systems.,530314.2277
+wetAg,"Wet Agriculture: Wetlands associated with flood irrigated agriculture,
+                including those found in riparian floodplains and hay meadows.",512476.3555
+wetMan,"Managed Wetlands: Wetlands managed specifically for wildlife, 
+                including public refuges.",370932.3861

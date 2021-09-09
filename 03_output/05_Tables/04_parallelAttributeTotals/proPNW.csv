@@ -1,0 +1,25 @@
+Region,Hydroperiod,Ownership,Wetland Type,Wetland Area (ha)
+Pacific NW,Seasonal,Private,riv,338.78
+Pacific NW,Semi-permanent,Private,riv,393.54
+Pacific NW,Temporary,Private,riv,205.99
+Pacific NW,Seasonal,Private,wet,1593.52
+Pacific NW,Semi-permanent,Private,wet,1779.48
+Pacific NW,Temporary,Private,wet,1059.16
+Pacific NW,Seasonal,Private,wetAg,780.71
+Pacific NW,Semi-permanent,Private,wetAg,316.28
+Pacific NW,Temporary,Private,wetAg,1621.14
+Pacific NW,Seasonal,Private,wetMan,0.39
+Pacific NW,Semi-permanent,Private,wetMan,0.1
+Pacific NW,Temporary,Private,wetMan,1.01
+Pacific NW,Seasonal,Public,riv,56.79
+Pacific NW,Semi-permanent,Public,riv,217.23
+Pacific NW,Temporary,Public,riv,29.36
+Pacific NW,Seasonal,Public,wet,2776.31
+Pacific NW,Semi-permanent,Public,wet,4759.17
+Pacific NW,Temporary,Public,wet,1257.34
+Pacific NW,Seasonal,Public,wetAg,92.2
+Pacific NW,Semi-permanent,Public,wetAg,15
+Pacific NW,Temporary,Public,wetAg,512.02
+Pacific NW,Seasonal,Public,wetMan,1567.31
+Pacific NW,Semi-permanent,Public,wetMan,1825.24
+Pacific NW,Temporary,Public,wetMan,1076.62

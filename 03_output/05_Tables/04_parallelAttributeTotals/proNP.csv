@@ -1,0 +1,25 @@
+Region,Hydroperiod,Ownership,Wetland Type,Wetland Area (ha)
+Northern Plains,Seasonal,Private,riv,210.07
+Northern Plains,Semi-permanent,Private,riv,487.37
+Northern Plains,Temporary,Private,riv,144.82
+Northern Plains,Seasonal,Private,wet,562.33
+Northern Plains,Semi-permanent,Private,wet,690.02
+Northern Plains,Temporary,Private,wet,608.37
+Northern Plains,Seasonal,Private,wetAg,62.46
+Northern Plains,Semi-permanent,Private,wetAg,34.99
+Northern Plains,Temporary,Private,wetAg,175.45
+Northern Plains,Seasonal,Private,wetMan,0.56
+Northern Plains,Semi-permanent,Private,wetMan,0.38
+Northern Plains,Temporary,Private,wetMan,0.25
+Northern Plains,Seasonal,Public,riv,67.42
+Northern Plains,Semi-permanent,Public,riv,684.73
+Northern Plains,Temporary,Public,riv,45.3
+Northern Plains,Seasonal,Public,wet,597.48
+Northern Plains,Semi-permanent,Public,wet,1104.03
+Northern Plains,Temporary,Public,wet,436.77
+Northern Plains,Seasonal,Public,wetAg,30.17
+Northern Plains,Semi-permanent,Public,wetAg,3.52
+Northern Plains,Temporary,Public,wetAg,85.4
+Northern Plains,Seasonal,Public,wetMan,896.26
+Northern Plains,Semi-permanent,Public,wetMan,4210.69
+Northern Plains,Temporary,Public,wetMan,536.73

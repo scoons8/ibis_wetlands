@@ -1,0 +1,155 @@
+SiteName,Latitude,Longitude,Num of Nests,Num Breeding Birds,Actual Bird Count,Year,Month,County,State,Count Type,Incidental Obs?,Nesting,nestStat
+Tule Lake NWR,41.92861111,-121.5069444,2308,4616,,2018,"",Siskiyou,CA,Pairs,No,Yes,0
+Modoc NWR,41.45752778,-120.5219444,36,72,,1989,"",Modoc,CA,Pairs,No,Yes,0
+Honey Lake,40.30222222,-120.3883333,50,100,,1997,"",Lassen,CA,Pairs,No,Yes,0
+Fairchild Swamp,41.60933285,-120.8513553,13,26,,1997,"",Modoc,CA,Pairs,No,Yes,0
+Blanca Wetlands,37.55643553,-105.6772562,,13,,2011,June,Alamosa,CO,Adults,No,,0
+Brush Hollow Reservoir,38.46416154,-105.0514322,0,12,,2009,June,Fremont,CO,Adults,No,No,0
+Cheney Reservoir,38.88643835,-108.3228171,0,2,,2010,July,Mesa,CO,Adults,No,No,0
+Cotton Lake,37.71716937,-105.7094763,,4,,2011,May,Alamosa,CO,Adults,No,,0
+Eleven Mile State Park,38.92835709,-105.5202629,61,151,,2015,May,Park,CO,Nests,Yes,Yes,0
+Hebron Slough,40.54555,-106.360452,0,9,,2000,June,Jackson,CO,Adults,No,No,0
+Hinman Reservoir,40.148591,-106.462619,0,3,,2000,July,Grand,CO,Adults,No,No,0
+John Martin Reservoir,38.077624,-103.033243,0,4,,2009,July,Bent,CO,Adults,No,No,0
+Lower Latham Reservoir,40.34333,-104.636539,2,4,,2010,July,Weld,CO,Adults,No,Yes,0
+Mud Lake CO,38.329408,-102.731341,0,35,,2000,"",Kiowa,CO,Adults,No,No,0
+Neeskah Reservoir,38.28444,-102.644716,0,2,,2002,"",Kiowa,CO,Adults,No,No,0
+San Luis Lake SWA,37.685832,-105.716788,0,50,,2000,July,Alamosa,CO,Adults,No,No,0
+Walden Reservoir,40.7339,-106.3046,,70,70,2015,July,Jackson,CO,Adults,Yes,Yes,0
+Pikes Stockade,37.361241,-105.820492,,27,27,2010,June,Alamosa,CO,Adults,No,,0
+Alamosa NWR,37.433478,-105.784454,,2,2,2011,May,Alamosa,CO,Adults,No,,0
+Cherry Creek State Park,39.638378,-104.854793,,6,6,2010,July,Arapahoe,CO,Adults,No,,0
+Russell Lakes SWA,37.940509,-106.13327,,3,3,2018,June,Saguache,CO,Adults,Yes,,0
+Monte Vista NWR,37.482605,-106.060943,1,2,150,2014,"",Rio Grande,CO,All,Yes,Yes,0
+American Falls Reservoir,43.02687,-112.6435812,15,30,,1995,"",Bingham,ID,Pairs,No,Yes,0
+Bear Lake NWR,42.14883,-111.2950882,9577,19154,,2010,"",Bear Lake,ID,Nests,No,Yes,0
+Blackfoot Reservoir,42.90993,-111.6204183,,20,20,1993,"",Caribou,ID,Adults,No,,0
+Camas NWR,43.93804,-112.2643843,,142,142,2007,"",Jefferson,ID,Adults,No,,0
+Chester Hill Reservoir,42.69563,-111.6138013,,8,8,1993,"",Caribou,ID,Adults,Yes,,0
+Fort Boise WMA,43.817288,-117.00133,,2,2,2007,"",Canyon,ID,Adults,No,,0
+Grays Lake NWR,43.00889,-111.426543,6037,12074,,2010,"",Bonneville,ID,Nests,No,Yes,0
+Hawkins Reservoir,42.51312,-112.337431,,9,,1993,"",Bannock,ID,Adults,Yes,,0
+Sterling WMA,42.976963,-112.782963,,26,26,2007,August,Bingham,ID,"",No,,0
+Bowdoin NWR,48.373459,-107.679346,,155,155,2018,"",Phillips,MT,Adults,No,,0
+Browns Lake,46.951106,-113.016845,,10,10,1995,"",Powell,MT,Adults,Yes,,0
+Canyon Ferry WMA,46.35817,-111.52088,,18,18,2000,"",Broadwater,MT,Adults,Yes,,0
+Cottonwood Reservoir,46.0384,-110.69073,,1,1,1995,"",Park,MT,Adults,Yes,,0
+Dailey Lake,45.26296,-110.81626,,7,7,2006,"",Park,MT,Adults,Yes,,0
+Freezeout Lake,47.66257,-112.04601,,2,2,2008,"",Teton,MT,Adults,Yes,,0
+Grass Lake NWR,45.8974,-109.1,,1,1,1991,"",Stillwater,MT,Adults,Yes,,0
+Medicine Lake NWR,48.37848,-104.57767,7,14,14,2014,"",Roosevelt,MT,Nests,No,Yes,0
+Kicking Horse Reservoir,47.455083,-114.069563,,1,1,2007,"",Lake,MT,Adults,Yes,,0
+Kleinschmidt Lake,46.9746,-113.04274,,7,7,2002,"",Powell,MT,Adults,Yes,,0
+Lee Metcalf NWR,46.54234,-114.08167,,1,1,2018,"",Ravalli,MT,Adults,Yes,,0
+Manning Lake,48.27249,-104.74924,20,40,40,2016,"",Roosevelt,MT,Nests,No,Yes,0
+Medicine Lake NWR,48.38785,-104.577667,0,4,4,2016,"",Sheridan,MT,Adults,No,No,0
+Nelson Reservoir,48.48538,-107.57585,,1,1,2015,"",Phillips,MT,Adults,Yes,,0
+Ninepipe NWR,47.436792,-114.127469,,12,12,1999,"",Lake,MT,Adults,Yes,,0
+Pablo NWR,47.644665,-114.170265,,1,1,2005,"",Lake,MT,Adults,Yes,,0
+Spidel WPA,46.13717,-108.85596,,5,5,1996,"",Golden Valley,MT,Adults,Yes,,0
+Upper Carter Pond FAS,47.153244,-109.425143,,3,3,2012,"",Fergus,MT,Adults,Yes,,0
+Warm Springs WMA,46.1975,-112.7754,,29,29,2007,"",Deer Lodge,MT,Adults,Yes,,0
+Warm Springs WMA,46.18597,-112.80396,,6,6,2013,"",Deer Lodge,MT,Adults,Yes,,0
+Wild Horse Reservoir,48.12381,-108.17002,8,16,16,2016,"",Phillips,MT,Nests,No,Yes,0
+Willow Creek Reservoir,45.684042,-111.710739,,1,1,1991,"",Madison,MT,Adults,Yes,,0
+Benton Lake NWR,47.670001,-111.329999,50,100,,2011,"",Cascade,MT,Nests,No,Yes,0
+Manning Lake,48.272495,-104.749238,10,20,,2011,"",Roosevelt,MT,Nests,No,Yes,0
+Red Rock Lakes NWR,44.63749,-111.840605,195,390,,2010,"",Beaverhead,MT,Nests,No,Yes,0
+Alkali Lake WMA,38.929515,-119.370921,0,0,,1997,"",Lyon,NV,Pairs,No,No,0
+Canvasback Club,39.581536,-118.522129,25,50,,2009,"",Churchill,NV,Pairs,No,Yes,0
+Franklin Lake,40.348441,-115.415327,200,400,,2010,"",Elko,NV,Pairs,No,Yes,0
+Harmon Reservoir,39.46611,-118.643904,0,0,,1997,"",Churchill,NV,Pairs,No,No,0
+Humboldt River,41.029175,-117.648049,20,40,,2010,"",Humboldt,NV,Pairs,No,Yes,0
+Humboldt River,40.932163,-117.234238,20,40,,2010,"",Humboldt,NV,Pairs,No,Yes,0
+Kirch WMA,38.367758,-115.115858,,17,17,2010,"",Nye,NV,Adults,No,,0
+Quinn River Lakes,41.512808,-118.152006,2070,4140,,1999,"","",NV,Pairs,No,Yes,0
+Quinn River,41.484609,-117.507758,30,60,,2010,"",Humboldt,NV,Pairs,No,Yes,0
+Quinn River,41.93956,-117.725305,75,150,,2010,"",Humboldt,NV,Pairs,No,Yes,0
+Quinn River,41.981998,-117.768458,40,80,,2010,"",Humboldt,NV,Pairs,No,Yes,0
+Railroad Valley,38.5391,-115.7356,13,26,,2010,"",Nye,NV,Pairs,No,Yes,0
+Ruby Lake NWR,40.197491,-115.479245,57,114,,2011,"",Elko,NV,Adults,No,Yes,0
+Rye Patch Reservoir,40.570604,-118.304659,0,0,,1997,"",Pershing,NV,Pairs,No,No,0
+Swan Lake,39.653888,-119.840469,45,90,90,2011,"",Washoe,NV,Adults,No,Yes,0
+Secret Soldier,40.902366,-115.364126,350,700,,2010,"",Elko,NV,Pairs,No,Yes,0
+Nine-Mile Slough,43.47222222,-118.6969444,0,0,,1997,"",Harney,OR,Pairs,No,No,0
+Anderson Lake,42.50527778,-119.8261111,0,0,,1995,"",Lake,OR,Pairs,No,No,0
+Summer Lake WMA,42.92138889,-120.7761111,225,450,,1997,"",Lake,OR,Pairs,No,Yes,0
+Silver Lake,43.37388889,-119.3780556,0,0,,1997,"",Harney,OR,Pairs,No,No,0
+Hart Lake,42.44722222,-119.8719444,11,22,,1988,"",Lake,OR,Nests,No,Yes,0
+Red-S,43.4175,-118.9088889,0,0,,1997,"",Harney,OR,Pairs,No,No,0
+Lake Abert,42.69583333,-120.2788889,10,20,,1994,"",Lake,OR,Adults,No,Yes,0
+Faye Field,42.89027778,-118.8861111,0,0,,1997,"",Harney,OR,Pairs,No,No,0
+Island Ranch,43.45972222,-118.9388889,0,0,,1997,"",Harney,OR,Pairs,No,No,0
+Sodhouse Bay,43.24472222,-118.8730556,0,0,,1997,"",Harney,OR,Pairs,No,No,0
+Schoolhouse Lake,42.95277778,-120.7138889,1,2,,1994,"",Lake,OR,,No,Yes,0
+Squarewell Slough,43.44138889,-118.84,0,0,,1997,"",Harney,OR,Pairs,No,No,0
+Lava Swamp,43.06722222,-118.8288889,0,0,,1997,"",Harney,OR,Pairs,No,No,0
+Ibis Pond,43.20666667,-118.905,5419,10838,,2010,"",Harney,OR,Pairs,No,Yes,0
+Retherford Lake,43.05833333,-118.7930556,1500,3000,,1998,"",Harney,OR,Pairs,No,Yes,0
+Wrights Pond,43.225,-118.8780556,60,120,,2010,"",Harney,OR,Pairs,No,Yes,0
+Chewaucan Marshes,42.5587,-120.3841,250,500,,1999,"",Lake,OR,Pairs,No,Yes,0
+Crump Lake,42.2712,-119.8551,60,120,,2010,"",Lake,OR,Pairs,No,Yes,0
+Goose Lake,42.1043,-120.3676,3004,6008,,2010,"",Lake,OR,Pairs,No,Yes,0
+Knox Pond,42.8825,-118.8611111,500,1000,,2009,"",Harney,OR,Pairs,No,Yes,0
+Silvies River,43.56805556,-119.0344444,45,90,,2010,"",Harney,OR,Pairs,No,Yes,0
+Paulina Marsh,43.1551,-120.9788,0,0,,1999,"",Lake,OR,Pairs,No,No,0
+Silver Lake Lake Co,43.1217,-120.9295,350,700,,1999,"",Lake,OR,Pairs,No,Yes,0
+Smokey Lake,42.4476,-121.368,160,320,,2004,"",Klamath,OR,Pairs,No,Yes,0
+Warbler Pond,43.30527778,-119.3030556,1605,3210,,2010,"",Harney,OR,Pairs,No,Yes,0
+Bear River Bay,41.395918,-112.230713,940,1880,1880,1999,"",Box Elder,UT,Pairs,No,Yes,0
+Bear River Club,41.499041,-112.231805,973,1947,,1999,"",Box Elder,UT,Pairs,No,Yes,0
+Chesapeake Club,41.485191,-112.17089,0,0,,1999,"",Box Elder,UT,Pairs,No,No,0
+Cutler Marsh,41.758283,-111.939667,3655,7311,7311,2009,May,Cache,UT,Pairs,No,Yes,0
+Farmington Bay WMA,40.882656,-112.013221,2991,5982,,2009,"",Davis,UT,Adults,No,Yes,0
+Fish Springs NWR,39.852173,-113.373091,35,70,,2009,"",Juab,UT,Nests,No,Yes,0
+Harold Crane WMA,41.345571,-112.16475,238,476,,1993,"",Box Elder,UT,Nests,No,Yes,0
+Harrison Duck Club,40.83333333,-112.0416667,0,0,,1999,"",Salt Lake,UT,Pairs,No,No,0
+Knudsons Marsh,41.48595,-112.097674,0,0,,1988,"",Box Elder,UT,Pairs,No,No,0
+Ouray NWR,40.15894,-109.588484,75,150,,1997,"",Uintah,UT,Pairs,No,Yes,0
+Reeder Overflow,41.437437,-112.094946,0,0,,1999,"",Box Elder,UT,Pairs,No,No,0
+South Corrine,41.527068,-112.120066,1,2,,1987,"",Box Elder,UT,,No,Yes,0
+Utah Lake,40.031378,-111.888607,257,514,515,2009,"",Utah,UT,Adults,No,Yes,0
+Layton Wetlands,41.027648,-112.027775,474,948,,2001,"",Davis,UT,Pairs,No,Yes,0
+South Willard Bay,41.322778,-112.159167,887,1775,,2009,"",Box Elder,UT,Pairs,No,Yes,0
+Bear River MBR,41.487828,-112.321693,3391,6783,6783,2008,"",Box Elder,UT,Pairs,No,Yes,0
+Public Shooting Grounds WMA,41.579441,-112.316794,,9,9,2009,June,Box Elder,UT,Adults,No,Yes,0
+Bamforth Lake,41.389994,-105.738911,0,0,,2010,"",Albany,WY,Pairs,No,No,0
+Caldwell Lake,41.154981,-105.793461,0,0,,2010,"",Albany,WY,Pairs,No,No,0
+Old Eden Reservoir,42.213162,-109.364222,0,0,,2011,"",Sweetwater,WY,Pairs,No,No,0
+Pilger Lake,41.375172,-105.830834,0,0,,2009,"",Albany,WY,Pairs,No,No,0
+Lower Klamath NWR,41.98749922,-121.7372991,3300,6600,,2011,"",Siskiyou,CA,Pairs,No,Yes,2
+Adams Lake,37.405982,-105.850267,,5,,2011,May,Alamosa,CO,Adults,No,,0
+Lake DeWeese,38.19969733,-105.4708599,0,1,,2009,July,Custer,CO,Adults,No,No,1
+Red Lion Ponds,40.606801,-102.681321,0,9,,2009,"",Logan,CO,Adults,No,No,1
+Fruitgrowers Reservoir,38.828625,-107.951898,,9,9,2010,"",Delta,CO,Adults,No,,0
+La Sauses,37.236399,-105.751664,,86,86,2011,May,Conejos,CO,Adults,No,,0
+Duck Valley,42.09002,-116.134197,7631,15262,,2010,"",Owyhee,ID,Nests,No,Yes,2
+Market Lake WMA,43.79011,-112.1615369,12250,24500,,2010,"",Jefferson,ID,Nests,No,Yes,2
+Mud Lake WMA,43.89228,-112.454048,4016,8032,,2010,"",Jefferson,ID,Nests,No,Yes,2
+Oxford Slough WPA,42.25039,-112.0019836,4741,9482,,2010,"",Franklin,ID,"",No,Yes,2
+Lake Helena WMA,46.70239,-111.96322,,15,15,2009,"",Lewis and Clark,MT,Adults,Yes,,0
+Homestead Lake,48.378478,-104.577667,3,6,6,2010,"",Sheridan,MT,Nests,No,Yes,2
+Ash Meadows NWR,36.398904,-116.334241,,32,,2010,"",Nye,NV,Pairs,No,,0
+Carson Lake,39.310493,-118.73423,1920,3840,,2011,"",Churchill,NV,Pairs,No,Yes,2
+Humboldt River,41.01603,-117.705233,30,60,,2010,"",Humboldt,NV,Pairs,No,Yes,2
+Humboldt River,40.964797,-117.276257,20,40,,2010,"",Humboldt,NV,Pairs,No,Yes,2
+Humboldt WMA,40.005322,-118.620108,418,836,,2010,"","",NV,Pairs,No,Yes,2
+Mason Valley WMA,39.090337,-119.097122,,19,19,2011,"",Lyon,NV,Adults,No,,0
+Quinn River,41.448792,-117.500499,15,30,,2010,"",Humboldt,NV,Pairs,No,Yes,2
+Quinn River,41.953392,-117.72557,40,80,,2010,"",Humboldt,NV,Pairs,No,Yes,2
+Spring Valley,39.45577,-114.495398,40,80,,2010,"",White Pine,NV,Pairs,No,Yes,2
+Stillwater NWR,39.625869,-118.519698,1500,3000,,2011,"",Churchill,NV,Nests,No,Yes,2
+Washoe Lake,39.281239,-119.793005,,69,,2011,"",Washoe,NV,Adults,No,,0
+Rock Creek,41.198266,-116.704147,40,80,,2010,"",Elko,NV,Pairs,No,Yes,2
+Twenty-mile Slough,42.13611111,-119.8838889,1128,2256,,2010,"",Lake,OR,Pairs,No,Yes,2
+Diamond Swamp,43.03333333,-118.7938889,1729,3458,,2010,"",Harney,OR,Pairs,No,Yes,2
+Greaser Reservoir,42.1481,-119.8303,22,44,,2010,"",Lake,OR,Pairs,No,Yes,2
+Malheur Lake,43.291542,-118.8199273,0,0,,2009,"",Harney,OR,Pairs,No,No,1
+North Jones,,,217,434,,2010,"","",OR,Pairs,No,Yes,2
+Sycan Marsh,42.83611111,-121.065,30,60,,2010,"",Lake,OR,Pairs,No,Yes,2
+Bear River MBR,41.485882,-112.327199,10775,21550,,2009,"",Box Elder,UT,Pairs,No,Yes,2
+Ogden Bay WMA,41.178333,-112.195,2387,4774,,2009,"",Weber,UT,Pairs,No,Yes,2
+Ambler Spring,41.905218,-106.049253,0,0,,2010,"",Albany,WY,Pairs,No,No,1
+Carroll Lake,41.413979,-105.717884,0,0,,2010,"",Albany,WY,Pairs,No,No,1
+Cokeville Meadows NWR,41.924071,-110.990207,0,0,,2009,"",Lincoln,WY,Pairs,No,No,1
+Hutton Lake NWR,41.178731,-105.725694,76,152,,2009,"",Albany,WY,Adults,No,Yes,2

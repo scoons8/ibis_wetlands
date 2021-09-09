@@ -1,0 +1,705 @@
+---
+title: "Wetland Tables"
+author: "Shea Coons"
+date: "2/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(data.table)
+library(knitr)
+library(reactable)
+library(tidyverse)
+library(htmlwidgets)
+library(webshot)
+```
+
+## Ecoregions and colony sites
+
+Below is a plot showing the number of ibis breeding colony sites within each ecoregion. Pair with map of ecoregions?
+
+```{r ecoregion colony table, echo=FALSE}
+
+# Table set up -----
+ecoTable <- fread('ecoTable.csv')
+
+# Plot -----
+ecoPlot <- ecoTable %>%
+  filter(NumColonies < 150) %>% 
+  arrange(NumColonies) %>%    # First sort by val. This sort the dataframe but NOT the factor levels
+  mutate(Ecoregion=factor(Ecoregion, levels=Ecoregion)) %>%   # This trick update the factor levels
+  ggplot( aes(x=Ecoregion, y= NumColonies)) +
+  # geom_segment( aes(xend=Ecoregion, yend=0)) +
+  geom_point( size=10, color="orange") +
+  coord_flip() +
+  geom_text(aes(label=NumColonies), vjust= 0.4, color = 'white', size=3.5) +
+  xlab('Ecoregion') +
+  ylab("Number of Breeding Colonies") +
+  ggtitle("Breeding Colonies by Region") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+## West-wide WFIB Habitat
+
+Below is a table showing overall wetland information for the ecoregions included in the study. 
+All values are in hectares.
+
+```{r overall wetland table, echo = FALSE}
+
+# Table set up -----
+
+hydro05 <- fread('summaryTable_wetlands.csv')
+hydro06<- hydro05 %>%
+  mutate_if(is.numeric, ~round(.,0))
+
+# Table ----
+reactable(hydro06, striped = T)
+```
+
+## WetType Table
+
+Below is a table showing the wetland types (function groups) used in the study, their descriptions, and total area in hectares (note: not the total area of water, total area overall!).
+
+```{r wetType, echo=FALSE}
+
+# Read in Table -----
+
+wetType <- fread('wetType_table.csv')
+
+# Table -----
+reactable(wetType, striped = T)
+
+```
+
+## Raw Data Sample Table
+
+Below is a table showing a sample of the water surface area data used in the study.
+
+```{r sample data, echo=FALSE}
+
+# Read in Table -----
+
+sampleDat <- fread('rawDataSample_table.csv')
+
+# Table -----
+reactable(sampleDat, striped = T)
+
+```
+
+
+## RF Variables Summary Table 
+
+Below is a table showing a summary of the climate and irrigation variables used in the random forest analysis. 
+
+```{r RF vars, echo=FALSE}
+
+# read in table -----
+summary <- fread('RFvarsSummary.csv')
+
+# Reduce number of numbers after decimal
+
+summary01 <- summary %>% 
+  mutate_if(is.numeric, ~round(.,0))
+
+# Rename columns -----
+
+colnames(summary01) <- c('Variable', 'Region', '1983-2003 (T1)', 'SD (T1)', '2004-2020 (T2)', 'SD (T2)', 'Change', '% Dif', 'Num. Wilcox-p Sig.', 'Num. LM-p Sig.')
+
+# Format table -----
+  # Will need to subset by variable -----
+
+    aet <- summary01 %>% 
+      filter(Variable == 'aet')
+  
+    pr <- summary01 %>% 
+      filter(Variable == 'pr')
+    
+    swe <- summary01 %>% 
+      filter(Variable == 'swe')
+    
+    ro <- summary01 %>% 
+      filter(Variable == 'ro')
+    
+    tmin <- summary01 %>% 
+      filter(Variable == 'tmin')
+    
+    irr <- summary01 %>% 
+      filter(Variable == 'irr_ha')
+    
+  # Make Tables -----
+    # aet -----
+      reactable(
+        aet,
+        pagination = FALSE,
+        fullWidth = F,
+        columns = list(
+          Variable = colDef(
+            style = JS("function(rowInfo, colInfo, state) {
+              var firstSorted = state.sorted[0]
+              // Merge cells if unsorted or sorting by school
+              if (!firstSorted || firstSorted.id === 'Variable') {
+                var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+                if (prevRow && rowInfo.row['Variable'] === prevRow['Variable']) {
+                  return { visibility: 'hidden' }
+                }
+              }
+            }")
+          )
+        ),
+        outlined = TRUE
+      )
+    # pr -----
+      reactable(
+        pr,
+        pagination = FALSE,
+        fullWidth = F,
+        columns = list(
+          Variable = colDef(
+            style = JS("function(rowInfo, colInfo, state) {
+              var firstSorted = state.sorted[0]
+              // Merge cells if unsorted or sorting by school
+              if (!firstSorted || firstSorted.id === 'Variable') {
+                var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+                if (prevRow && rowInfo.row['Variable'] === prevRow['Variable']) {
+                  return { visibility: 'hidden' }
+                }
+              }
+            }")
+          )
+        ),
+        outlined = TRUE
+      )
+    
+    # swe -----
+      reactable(
+        swe,
+        pagination = FALSE,
+        fullWidth = F,
+        columns = list(
+          Variable = colDef(
+            style = JS("function(rowInfo, colInfo, state) {
+              var firstSorted = state.sorted[0]
+              // Merge cells if unsorted or sorting by school
+              if (!firstSorted || firstSorted.id === 'Variable') {
+                var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+                if (prevRow && rowInfo.row['Variable'] === prevRow['Variable']) {
+                  return { visibility: 'hidden' }
+                }
+              }
+            }")
+          )
+        ),
+        outlined = TRUE
+      )
+    
+    # ro -----
+      reactable(
+        ro,
+        pagination = FALSE,
+        fullWidth = F,
+        columns = list(
+          Variable = colDef(
+            style = JS("function(rowInfo, colInfo, state) {
+              var firstSorted = state.sorted[0]
+              // Merge cells if unsorted or sorting by school
+              if (!firstSorted || firstSorted.id === 'Variable') {
+                var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+                if (prevRow && rowInfo.row['Variable'] === prevRow['Variable']) {
+                  return { visibility: 'hidden' }
+                }
+              }
+            }")
+          )
+        ),
+        outlined = TRUE
+      )
+    
+    # tmin -----
+      reactable(
+        tmin,
+        pagination = FALSE,
+        fullWidth = F,
+        columns = list(
+          Variable = colDef(
+            style = JS("function(rowInfo, colInfo, state) {
+              var firstSorted = state.sorted[0]
+              // Merge cells if unsorted or sorting by school
+              if (!firstSorted || firstSorted.id === 'Variable') {
+                var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+                if (prevRow && rowInfo.row['Variable'] === prevRow['Variable']) {
+                  return { visibility: 'hidden' }
+                }
+              }
+            }")
+          )
+        ),
+        outlined = TRUE
+      )
+    
+    # irr -----
+      reactable(
+        irr,
+        pagination = FALSE,
+        fullWidth = F,
+        columns = list(
+          Variable = colDef(
+            style = JS("function(rowInfo, colInfo, state) {
+              var firstSorted = state.sorted[0]
+              // Merge cells if unsorted or sorting by school
+              if (!firstSorted || firstSorted.id === 'Variable') {
+                var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+                if (prevRow && rowInfo.row['Variable'] === prevRow['Variable']) {
+                  return { visibility: 'hidden' }
+                }
+              }
+            }")
+          )
+        ),
+        outlined = TRUE
+      )
+
+# Save table (optional) -----
+table <- reactable(
+  summary01,
+  pagination = FALSE,
+  columns = list(
+    Variable = colDef(
+      style = JS("function(rowInfo, colInfo, state) {
+        var firstSorted = state.sorted[0]
+        // Merge cells if unsorted or sorting by school
+        if (!firstSorted || firstSorted.id === 'Variable') {
+          var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+          if (prevRow && rowInfo.row['Variable'] === prevRow['Variable']) {
+            return { visibility: 'hidden' }
+          }
+        }
+      }")
+    )
+  ),
+  outlined = TRUE
+)
+
+html <- 'table.html'
+saveWidget(table, html)
+webshot(html, 'tableSnapshot.png')
+
+```
+
+
+## Proportions Table 
+
+Below is a table showing a summary of the mean overlap between land ownership, hydroperiod, and wetland type.
+
+```{r Proportions Table, echo=FALSE}
+
+# read in tables -----
+gb <- fread('proGB.csv')
+mr <- fread('proMR.csv')
+md <- fread('proMD.csv')
+np <- fread('proNP.csv')
+nr <- fread('proNR.csv')
+pnw <- fread('proPNW.csv')
+sp <- fread('proSP.csv')
+sr <- fread('proSR.csv')
+
+gb01 <- gb
+colnames(gb01) <- c('Region', 'Hydroperiod', 'Ownership', 'WetType', 'WetArea')
+
+# Make Tables -----
+  # GB -----
+    reactable(
+      gb,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+        Region = colDef(
+          width = 250,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+
+  # MR -----
+    reactable(
+      mr,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+        Region = colDef(
+          width = 250,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+  
+  # MD -----
+    reactable(
+      md,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+         Region = colDef(
+          width = 250,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+  
+  # NP -----
+    reactable(
+      np,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+         Region = colDef(
+          width = 250,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+
+  # NR -----
+      reactable(
+        nr,
+        pagination = FALSE,
+        fullWidth = T,
+        columns = list(
+          Region = colDef(
+          width = 250,
+            style = JS("function(rowInfo, colInfo, state) {
+              var firstSorted = state.sorted[0]
+              // Merge cells if unsorted or sorting by school
+              if (!firstSorted || firstSorted.id === 'Region') {
+                var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+                if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                  return { visibility: 'hidden' }
+                }
+              }
+            }")
+          )
+        ),
+        outlined = TRUE
+      )
+  
+  # PNW -----
+    reactable(
+      pnw,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+         Region = colDef(
+          width = 250,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+
+  # SP -----
+    reactable(
+      sp,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+         Region = colDef(
+          width = 250,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+  
+  # SR -----
+    reactable(
+      sr,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+         Region = colDef(
+          width = 250,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+```
+
+## Class Summary Tables by Region 
+
+Below are tables showing summaries of wetland change across wetland type, ownership and hydroperiod.
+
+```{r Class Table, echo=FALSE}
+
+# read in tables -----
+gb <- fread('table_gb_types.csv')
+mr <- fread('table_mr_types.csv')
+md <- fread('table_md_types.csv')
+np <- fread('table_np_types.csv')
+nr <- fread('table_nr_types.csv')
+pnw <- fread('table_pnw_types.csv')
+sp <- fread('table_sp_types.csv')
+sr <- fread('table_sr_types.csv')
+
+# Make Tables -----
+  # GB -----
+    reactable(
+      gb,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+        perDif = colDef(width = 80),
+        Region = colDef(
+          width = 220,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+
+    # MR -----
+    reactable(
+      mr,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+        perDif = colDef(width = 80),
+        Region = colDef(
+          width = 220,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+  
+  # MD -----
+    reactable(
+      md,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+        perDif = colDef(width = 80),
+         Region = colDef(
+          width = 220,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+  
+  # NP -----
+    reactable(
+      np,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+        perDif = colDef(width = 80),
+         Region = colDef(
+          width = 220,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+
+  # NR -----
+      reactable(
+        nr,
+        pagination = FALSE,
+        fullWidth = T,
+        columns = list(
+          perDif = colDef(width = 80),
+          Region = colDef(
+          width = 220,
+            style = JS("function(rowInfo, colInfo, state) {
+              var firstSorted = state.sorted[0]
+              // Merge cells if unsorted or sorting by school
+              if (!firstSorted || firstSorted.id === 'Region') {
+                var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+                if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                  return { visibility: 'hidden' }
+                }
+              }
+            }")
+          )
+        ),
+        outlined = TRUE
+      )
+  
+  # PNW -----
+    reactable(
+      pnw,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+        perDif = colDef(width = 80),
+         Region = colDef(
+          width = 220,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+
+  # SP -----
+    reactable(
+      sp,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+        perDif = colDef(width = 80),
+         Region = colDef(
+          width = 220,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+  
+  # SR -----
+    reactable(
+      sr,
+      pagination = FALSE,
+      fullWidth = T,
+      columns = list(
+        perDif = colDef(width = 80),
+         Region = colDef(
+          width = 220,
+          style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Region') {
+              var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+              if (prevRow && rowInfo.row['Region'] === prevRow['Region']) {
+                return { visibility: 'hidden' }
+              }
+            }
+          }")
+        )
+      ),
+      outlined = TRUE
+    )
+
+```

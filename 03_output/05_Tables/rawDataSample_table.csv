@@ -1,0 +1,11 @@
+idPoly,siteName,ownAg,wetType,year,month,period,wetHa,ecoHydro,HUC4
+267712,Cokeville Meadows NWR,Public,wetMan,2020,5,semi,0,Southern Rockies and Basins,1601
+106042,Humboldt WMA,Public,wetMan,2001,9,seasonal,0,Great Basin-Colorado Plateau,1604
+259310,Utah Lake,Private,wet,1990,10,temp,0.137555733323097,Great Basin-Colorado Plateau,1602
+88489,Pablo NWR,Private,wet,2004,7,semi,0,Northern Rockies,1701
+63593,Grass Lake NWR,Public,wetMan,1991,7,seasonal,0.0122600743583604,Northern Plains,1007
+271376,Medicine Lake NWR,Public,wet,2001,7,temp,0,Northern Plains,1006
+238748,Layton Wetlands,Private,wet,2001,6,temp,0,Great Basin-Colorado Plateau,1602
+154167,Island Ranch,Private,wetAg,1996,3,seasonal,0.488499074794498,Great Basin-Colorado Plateau,1712
+116420,Secret Soldier,Private,riv,1989,7,temp,0,Great Basin-Colorado Plateau,1604
+130248,Sycan Marsh,Public,wet,1992,5,semi,0,Pacific NW,1801

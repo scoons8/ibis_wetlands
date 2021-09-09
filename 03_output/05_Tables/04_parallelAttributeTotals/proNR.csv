@@ -1,0 +1,19 @@
+Region,Hydroperiod,Ownership,Wetland Type,Wetland Area (ha)
+Northern Rockies,Seasonal,Private,riv,5.57
+Northern Rockies,Semi-permanent,Private,riv,8.62
+Northern Rockies,Temporary,Private,riv,4.26
+Northern Rockies,Seasonal,Private,wet,58.83
+Northern Rockies,Semi-permanent,Private,wet,147.55
+Northern Rockies,Temporary,Private,wet,92.1
+Northern Rockies,Seasonal,Private,wetAg,0.24
+Northern Rockies,Semi-permanent,Private,wetAg,0.42
+Northern Rockies,Temporary,Private,wetAg,3.66
+Northern Rockies,Seasonal,Public,riv,68.11
+Northern Rockies,Semi-permanent,Public,riv,1042.25
+Northern Rockies,Temporary,Public,riv,32.87
+Northern Rockies,Seasonal,Public,wet,327.23
+Northern Rockies,Semi-permanent,Public,wet,1125.55
+Northern Rockies,Temporary,Public,wet,178.29
+Northern Rockies,Seasonal,Public,wetAg,0.01
+Northern Rockies,Semi-permanent,Public,wetAg,0
+Northern Rockies,Temporary,Public,wetAg,1.65
